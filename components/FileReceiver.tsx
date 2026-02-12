@@ -6,7 +6,6 @@ import { Download, File, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-// Define explicit interface for file metadata
 interface FileMetadata {
     originalName: string;
     size: number;
@@ -16,7 +15,6 @@ interface FileMetadata {
 export default function FileReceiver() {
     const [token, setToken] = useState('');
     const [loading, setLoading] = useState(false);
-    // Use the explicit interface instead of 'any' to fix lint errors while keeping types safe
     const [fileData, setFileData] = useState<FileMetadata | null>(null);
     const [error, setError] = useState<string | null>(null);
 

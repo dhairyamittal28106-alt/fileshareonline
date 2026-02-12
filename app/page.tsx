@@ -12,7 +12,7 @@ export default function Home() {
   const [mode, setMode] = useState<'send' | 'receive'>('send');
 
   return (
-    <main className="min-h-screen relative overflow-hidden flex flex-col">
+    <main className="min-h-screen relative overflow-hidden flex flex-col bg-[#020617] text-white">
       {/* Background Gradients */}
       <div className="fixed inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/20 via-[#020617] to-[#020617]" />
       <div className="fixed inset-0 z-0 pointer-events-none opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150 mix-blend-overlay" />
