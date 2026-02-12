@@ -1,4 +1,5 @@
 import { put } from '@vercel/blob';
+import crypto from 'crypto';
 
 export async function saveFile(file: File): Promise<string> {
     const filename = `${crypto.randomUUID()}-${file.name}`;

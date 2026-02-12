@@ -12,6 +12,17 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'No file provided' }, { status: 400 });
         }
 
+        // Debug logging
+        console.log('Starting upload...');
+        if (!process.env.BLOB_READ_WRITE_TOKEN) {
+            console.error('Missing BLOB_READ_WRITE_TOKEN');
+            return NextResponse.json({ error: 'Server configuration error: Missing Blob Token' }, { status: 500 });
+        }
+        if (!process.env.KV_REST_API_URL) {
+            console.error('Missing KV_REST_API_URL');
+            return NextResponse.json({ error: 'Server configuration error: Missing KV URL' }, { status: 500 });
+        }
+
         // Save file
         const fileName = await saveFile(file);
 
