@@ -1,11 +1,5 @@
 {
     "framework": "nextjs",
     "buildCommand": "npm run build",
-    "installCommand": "npm install",
-    "functions": {
-        "app/api/**/*": {
-            "memory": 1024,
-            "maxDuration": 10
-        }
-    }
+    "installCommand": "npm install"
 }

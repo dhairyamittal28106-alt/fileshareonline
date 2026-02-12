@@ -42,13 +42,16 @@ export default function FileUploader() {
                 body: formData,
             });
 
-            if (!res.ok) throw new Error('Upload failed');
-
             const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || 'Upload failed');
+            }
+
             setToken(data.token);
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            setError('Failed to upload file. Please check your connection.');
+            setError(err.message || 'Failed to upload file. Please check your connection.');
         } finally {
             setUploading(false);
         }
