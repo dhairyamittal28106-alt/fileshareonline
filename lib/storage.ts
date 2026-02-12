@@ -1,19 +1,14 @@
-import fs from 'fs/promises';
-import path from 'path';
-
-const UPLOAD_DIR = path.join(process.cwd(), '.uploads');
+import { put } from '@vercel/blob';
 
 export async function saveFile(file: File): Promise<string> {
-    await fs.mkdir(UPLOAD_DIR, { recursive: true });
+    const filename = `${crypto.randomUUID()}-${file.name}`;
+    const blob = await put(filename, file, {
+        access: 'public',
+    });
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const fileName = `${crypto.randomUUID()}-${file.name}`;
-    const filePath = path.join(UPLOAD_DIR, fileName);
-
-    await fs.writeFile(filePath, buffer);
-    return fileName;
+    return blob.url;
 }
 
 export function getFilePath(fileName: string): string {
-    return path.join(UPLOAD_DIR, fileName);
+    return fileName; // In the blob version, the "fileName" stored in metadata is actually the full URL
 }
