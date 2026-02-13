@@ -42,7 +42,8 @@ export default function FileUploader() {
                         body: JSON.stringify({
                             url: fileData.url,
                             name: fileData.name,
-                            size: fileData.size
+                            size: fileData.size,
+                            key: fileData.key
                         }),
                     });
 

@@ -18,13 +18,22 @@ export type FileMetadata = {
   mimeType: string;
   size: number;
   filePath: string; // Blob URL
+  fileKey?: string; // UploadThing Key
   createdAt: number;
 };
 
 export async function saveMetadata(metadata: FileMetadata) {
   if (!redis) throw new Error('Redis client not initialized');
-  // Save metadata with a 24-hour expiration (86400 seconds)
-  await redis.set(metadata.token, JSON.stringify(metadata), 'EX', 86400);
+
+  // 1. Save metadata with a 15-minute expiration (900 seconds)
+  await redis.set(metadata.token, JSON.stringify(metadata), 'EX', 900);
+
+  // 2. Schedule for physical deletion (backup if user doesn't access it)
+  // We use a Sorted Set where Score = Expiration Timestamp
+  if (metadata.fileKey) {
+    const expiresAt = Date.now() + 15 * 60 * 1000;
+    await redis.zadd('cleanup_schedule', expiresAt, JSON.stringify({ key: metadata.fileKey, token: metadata.token }));
+  }
 }
 
 export async function getMetadata(token: string): Promise<FileMetadata | null> {

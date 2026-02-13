@@ -9,6 +9,7 @@ export async function POST(req: NextRequest) {
         let originalName;
         let mimeType;
         let size;
+        let key;
 
         const contentType = req.headers.get('content-type') || '';
 
@@ -19,6 +20,7 @@ export async function POST(req: NextRequest) {
             originalName = body.name;
             mimeType = 'application/octet-stream';
             size = body.size;
+            key = body.key;
         } else {
             // Fallback or Legacy
             return NextResponse.json({ error: 'This endpoint now expects JSON metadata from UploadThing' }, { status: 400 });
@@ -35,6 +37,7 @@ export async function POST(req: NextRequest) {
                 mimeType,
                 size,
                 filePath: fileUrl,
+                fileKey: key, // Pass the key for cleanup
                 createdAt: Date.now(),
             });
         } catch (dbError: any) {
