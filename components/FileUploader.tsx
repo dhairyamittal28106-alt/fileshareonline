@@ -5,10 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, File, Check, Copy, Loader2, X } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { useUploadThing } from "@/lib/uploadthing";
 
 export default function FileUploader() {
     const [file, setFile] = useState<File | null>(null);
-    const [uploading, setUploading] = useState(false);
+    // removing local uploading state, using hook's isUploading
     const [token, setToken] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -27,34 +28,42 @@ export default function FileUploader() {
         }
     };
 
+    const { startUpload, isUploading } = useUploadThing("fileUploader", {
+        onClientUploadComplete: async (res) => {
+            if (res && res.length > 0) {
+                const fileData = res[0] as any; // Temporary cast
+                try {
+                    // Sync metadata to our database
+                    const response = await fetch('/api/upload', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            url: fileData.url,
+                            name: fileData.name,
+                            size: fileData.size
+                        }),
+                    });
+
+                    if (!response.ok) throw new Error('Failed to save metadata');
+
+                    const data = await response.json();
+                    setToken(data.token);
+                } catch (err) {
+                    setError('Upload successful but failed to save token.');
+                    console.error(err);
+                }
+            }
+        },
+        onUploadError: (error: any) => {
+            setError(error.message || 'Upload failed');
+        },
+    });
+
     const uploadFile = async () => {
         if (!file) return;
-
-        setUploading(true);
         setError(null);
-
-        const formData = new FormData();
-        formData.append('file', file);
-
-        try {
-            const res = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                throw new Error(data.error || 'Upload failed');
-            }
-
-            setToken(data.token);
-        } catch (err: any) {
-            console.error(err);
-            setError(err.message || 'Failed to upload file. Please check your connection.');
-        } finally {
-            setUploading(false);
-        }
+        // Start UploadThing upload
+        await startUpload([file]);
     };
 
     const copyToken = () => {
@@ -124,10 +133,10 @@ export default function FileUploader() {
 
                         <button
                             onClick={uploadFile}
-                            disabled={!file || uploading}
+                            disabled={!file || isUploading}
                             className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium shadow-lg shadow-indigo-900/20 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
-                            {uploading ? (
+                            {isUploading ? (
                                 <>
                                     <Loader2 className="w-5 h-5 animate-spin" />
                                     <span>Encrypting & Uploading...</span>
