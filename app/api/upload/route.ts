@@ -24,21 +24,35 @@ export async function POST(req: NextRequest) {
         }
 
         // Save file
-        const fileName = await saveFile(file);
+        let fileName;
+        try {
+            console.log('Attempting Blob upload...');
+            fileName = await saveFile(file);
+            console.log('Blob upload success:', fileName);
+        } catch (storageError: any) {
+            console.error('Storage Error:', storageError);
+            return NextResponse.json({ error: `Storage Failed: ${storageError.message}` }, { status: 502 });
+        }
 
         // Generate 6-digit token
-        // Ensure uniqueness in a real app, but for MVP random is fine 
         const token = crypto.randomInt(100000, 999999).toString();
 
         // Save metadata
-        await saveMetadata({
-            token,
-            originalName: file.name,
-            mimeType: file.type,
-            size: file.size,
-            filePath: fileName,
-            createdAt: Date.now(),
-        });
+        try {
+            console.log('Attempting Database save...');
+            await saveMetadata({
+                token,
+                originalName: file.name,
+                mimeType: file.type,
+                size: file.size,
+                filePath: fileName,
+                createdAt: Date.now(),
+            });
+            console.log('Database save success');
+        } catch (dbError: any) {
+            console.error('Database Error:', dbError);
+            return NextResponse.json({ error: `Database Failed: ${dbError.message}` }, { status: 502 });
+        }
 
         return NextResponse.json({ token });
     } catch (error) {
