@@ -26,9 +26,7 @@ export async function POST(req: NextRequest) {
         // Save file
         let fileName;
         try {
-            console.log('Attempting Blob upload...');
             fileName = await saveFile(file);
-            console.log('Blob upload success:', fileName);
         } catch (storageError: any) {
             console.error('Storage Error:', storageError);
             return NextResponse.json({ error: `Storage Failed: ${storageError.message}` }, { status: 502 });
@@ -39,7 +37,6 @@ export async function POST(req: NextRequest) {
 
         // Save metadata
         try {
-            console.log('Attempting Database save...');
             await saveMetadata({
                 token,
                 originalName: file.name,
@@ -48,7 +45,6 @@ export async function POST(req: NextRequest) {
                 filePath: fileName,
                 createdAt: Date.now(),
             });
-            console.log('Database save success');
         } catch (dbError: any) {
             console.error('Database Error:', dbError);
             return NextResponse.json({ error: `Database Failed: ${dbError.message}` }, { status: 502 });
