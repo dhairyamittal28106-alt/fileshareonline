@@ -172,7 +172,7 @@ export default function FileUploader() {
 
                         <h3 className="text-2xl font-bold text-white mb-2">Ready to Share</h3>
                         <p className="text-white/50 text-center mb-8 max-w-xs">
-                            This unique code grants access to your file for the next 24 hours.
+                            This unique code grants access to your file for the next 15 minutes.
                         </p>
 
                         <div className="relative w-full mb-8 group">
