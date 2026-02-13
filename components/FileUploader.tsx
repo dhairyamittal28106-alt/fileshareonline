@@ -142,7 +142,16 @@ export default function FileUploader() {
 
                         {error && (
                             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-200 text-sm text-center">
-                                {error}
+                                <p>{error}</p>
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        uploadFile();
+                                    }}
+                                    className="mt-2 px-4 py-1 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-xs font-semibold uppercase tracking-wider transition-colors"
+                                >
+                                    Retry Upload
+                                </button>
                             </div>
                         )}
 

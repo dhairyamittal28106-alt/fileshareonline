@@ -8,6 +8,11 @@ export const ourFileRouter = {
     fileUploader: f({
         blob: { maxFileSize: "2GB", maxFileCount: 1 },
     })
+        .middleware(async ({ req }) => {
+            // This code runs on your server before upload
+            // verify user if needed
+            return { user: "anonymous" };
+        })
         .onUploadComplete(async ({ metadata, file }) => {
             // This code RUNS ON YOUR SERVER after upload
             const fileData = file as any; // Temporary fix for type mismatch
