@@ -8,14 +8,15 @@ export const ourFileRouter = {
     fileUploader: f({
         blob: { maxFileSize: "2GB", maxFileCount: 1 },
     })
-        .middleware(async ({ req }) => {
+        .middleware(async () => {
             // This code runs on your server before upload
             // verify user if needed
             return { user: "anonymous" };
         })
-        .onUploadComplete(async ({ metadata, file }) => {
+        .onUploadComplete(async ({ file }) => {
             // This code RUNS ON YOUR SERVER after upload
-            const fileData = file as any; // Temporary fix for type mismatch
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const fileData = file as any;
             console.log("Upload complete:", fileData.url);
             return { url: fileData.url, name: fileData.name, size: fileData.size };
         }),

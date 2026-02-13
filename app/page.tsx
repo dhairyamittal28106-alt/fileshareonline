@@ -2,11 +2,10 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Share2, UploadCloud, ShieldCheck, Zap, Github, Twitter } from 'lucide-react';
+import { Share2, UploadCloud, ShieldCheck, Zap } from 'lucide-react';
 import FileUploader from '@/components/FileUploader';
 import FileReceiver from '@/components/FileReceiver';
-import AdPlaceholder from '@/components/AdPlaceholder';
-import { clsx } from 'clsx';
+import { clsx } from "clsx";
 
 export default function Home() {
   const [mode, setMode] = useState<'send' | 'receive'>('send');
@@ -122,7 +121,7 @@ export default function Home() {
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Bank-Grade Encryption</h3>
               <p className="text-white/40 text-sm leading-relaxed">
-                Your files are encrypted in transit and at rest. We can't see what you share.
+                Your files are encrypted in transit and at rest. We can&apos;t see what you share.
               </p>
             </div>
             <div className="flex flex-col items-center md:items-start text-center md:text-left">

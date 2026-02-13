@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { saveFile } from '@/lib/storage';
+
 import { saveMetadata } from '@/lib/db';
 import crypto from 'crypto';
 
@@ -40,9 +40,10 @@ export async function POST(req: NextRequest) {
                 fileKey: key, // Pass the key for cleanup
                 createdAt: Date.now(),
             });
-        } catch (dbError: any) {
+        } catch (dbError: unknown) {
             console.error('Database Error:', dbError);
-            return NextResponse.json({ error: `Database Failed: ${dbError.message}` }, { status: 502 });
+            const errorMessage = dbError instanceof Error ? dbError.message : 'Unknown error';
+            return NextResponse.json({ error: `Database Failed: ${errorMessage}` }, { status: 502 });
         }
 
         return NextResponse.json({ token });

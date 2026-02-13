@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, File, Check, Copy, Loader2, X } from 'lucide-react';
-import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { useUploadThing } from "@/lib/uploadthing";
 
@@ -30,10 +29,17 @@ export default function FileUploader() {
 
     const [progress, setProgress] = useState(0);
 
+    interface UploadResult {
+        url: string;
+        name: string;
+        size: number;
+        key: string;
+    }
+
     const { startUpload, isUploading } = useUploadThing("fileUploader", {
         onClientUploadComplete: async (res) => {
             if (res && res.length > 0) {
-                const fileData = res[0] as any;
+                const fileData = res[0] as unknown as UploadResult;
                 try {
                     // Sync metadata to our database
                     const response = await fetch('/api/upload', {
@@ -60,25 +66,51 @@ export default function FileUploader() {
         onUploadProgress: (p) => {
             setProgress(p);
         },
-        onUploadError: (error: any) => {
-            console.error("Full Upload Error:", error);
-            // safe check for data property
+        onUploadError: (err: unknown) => {
+            console.error("Upload Error:", err);
+            const error = err as { message: string; data?: { message: string } };
+
+            // Check if we should retry
+            // We can't easily trigger a "retry" from here without tracking state.
+            // For now, simple error display.
+            // The user has a manual "Retry" button which is safer than infinite loops.
+
             const serverMsg = error?.data?.message || '';
             const techMsg = error?.message || 'Unknown error';
-            setError(`Upload failed: ${techMsg} ${serverMsg ? `(${serverMsg})` : ''}`);
+
+            // If it's a 400 and we suspect timeout, suggest smaller file
+            let customMsg = "";
+            if (techMsg.includes("400")) {
+                customMsg = " (Likely Network Timeout or Interruption)";
+            }
+
+            setError(`Upload failed${customMsg}: ${techMsg} ${serverMsg ? `(${serverMsg})` : ''}`);
         },
     });
 
-    const uploadFile = async () => {
+    const uploadFile = async (retryCount = 0) => {
         if (!file) return;
-        console.log("Starting upload for:", {
-            name: file.name,
-            size: file.size,
-            type: file.type
-        });
-        setError(null);
-        setProgress(0);
-        await startUpload([file]);
+
+        console.log(`Starting upload for: ${file.name} (Attempt ${retryCount + 1})`);
+
+        if (retryCount === 0) {
+            setError(null);
+            setProgress(0);
+        }
+
+        try {
+            await startUpload([file]);
+        } catch (e) {
+            console.error("Upload attempt failed:", e);
+            if (retryCount < 3) {
+                const nextRetry = retryCount + 1;
+                console.log(`Retrying in 2 seconds... (Attempt ${nextRetry})`);
+                setError(`Upload failed. Retrying... (${nextRetry}/3)`);
+                setTimeout(() => uploadFile(nextRetry), 2000);
+            } else {
+                // Error is handled by onUploadError callback
+            }
+        }
     };
 
     const copyToken = () => {
@@ -156,7 +188,7 @@ export default function FileUploader() {
                         )}
 
                         <button
-                            onClick={uploadFile}
+                            onClick={() => uploadFile()}
                             disabled={!file || isUploading}
                             className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium shadow-lg shadow-indigo-900/20 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
