@@ -1,20 +1,34 @@
-import { kv } from '@vercel/kv';
+import Redis from 'ioredis';
+
+// Use a singleton pattern to prevent multiple connections in serverless environment
+let redis: Redis | null = null;
+
+if (!process.env.REDIS_URL) {
+  console.error('Missing REDIS_URL environment variable');
+} else {
+  // In production (Vercel), usually we want to reuse the connection if possible,
+  // though with serverless functions new connections might be created per invocation.
+  // ioredis handles connection pooling well.
+  redis = new Redis(process.env.REDIS_URL);
+}
 
 export type FileMetadata = {
   token: string;
   originalName: string;
   mimeType: string;
   size: number;
-  filePath: string; // This will now store the Blob URL
+  filePath: string; // Blob URL
   createdAt: number;
 };
 
 export async function saveMetadata(metadata: FileMetadata) {
+  if (!redis) throw new Error('Redis client not initialized');
   // Save metadata with a 24-hour expiration (86400 seconds)
-  await kv.set(metadata.token, metadata, { ex: 86400 });
+  await redis.set(metadata.token, JSON.stringify(metadata), 'EX', 86400);
 }
 
 export async function getMetadata(token: string): Promise<FileMetadata | null> {
-  const metadata = await kv.get<FileMetadata>(token);
-  return metadata || null;
+  if (!redis) return null;
+  const data = await redis.get(token);
+  return data ? JSON.parse(data) : null;
 }

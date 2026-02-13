@@ -18,9 +18,9 @@ export async function POST(req: NextRequest) {
             console.error('Missing BLOB_READ_WRITE_TOKEN');
             return NextResponse.json({ error: 'Server configuration error: Missing Blob Token' }, { status: 500 });
         }
-        if (!process.env.KV_REST_API_URL) {
-            console.error('Missing KV_REST_API_URL');
-            return NextResponse.json({ error: 'Server configuration error: Missing KV URL' }, { status: 500 });
+        if (!process.env.REDIS_URL) {
+            console.error('Missing REDIS_URL');
+            return NextResponse.json({ error: 'Server configuration error: Missing REDIS_URL' }, { status: 500 });
         }
 
         // Save file
