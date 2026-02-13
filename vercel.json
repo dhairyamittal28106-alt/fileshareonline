@@ -7,5 +7,10 @@
             "path": "/api/cron/cleanup",
             "schedule": "*/15 * * * *"
         }
-    ]
+    ],
+    "functions": {
+        "app/api/**/*": {
+            "maxDuration": 60
+        }
+    }
 }

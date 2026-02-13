@@ -61,12 +61,21 @@ export default function FileUploader() {
             setProgress(p);
         },
         onUploadError: (error: any) => {
-            setError(error.message || 'Upload failed');
+            console.error("Full Upload Error:", error);
+            // safe check for data property
+            const serverMsg = error?.data?.message || '';
+            const techMsg = error?.message || 'Unknown error';
+            setError(`Upload failed: ${techMsg} ${serverMsg ? `(${serverMsg})` : ''}`);
         },
     });
 
     const uploadFile = async () => {
         if (!file) return;
+        console.log("Starting upload for:", {
+            name: file.name,
+            size: file.size,
+            type: file.type
+        });
         setError(null);
         setProgress(0);
         await startUpload([file]);
