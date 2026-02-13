@@ -28,10 +28,12 @@ export default function FileUploader() {
         }
     };
 
+    const [progress, setProgress] = useState(0);
+
     const { startUpload, isUploading } = useUploadThing("fileUploader", {
         onClientUploadComplete: async (res) => {
             if (res && res.length > 0) {
-                const fileData = res[0] as any; // Temporary cast
+                const fileData = res[0] as any;
                 try {
                     // Sync metadata to our database
                     const response = await fetch('/api/upload', {
@@ -54,6 +56,9 @@ export default function FileUploader() {
                 }
             }
         },
+        onUploadProgress: (p) => {
+            setProgress(p);
+        },
         onUploadError: (error: any) => {
             setError(error.message || 'Upload failed');
         },
@@ -62,7 +67,7 @@ export default function FileUploader() {
     const uploadFile = async () => {
         if (!file) return;
         setError(null);
-        // Start UploadThing upload
+        setProgress(0);
         await startUpload([file]);
     };
 
@@ -139,60 +144,67 @@ export default function FileUploader() {
                             {isUploading ? (
                                 <>
                                     <Loader2 className="w-5 h-5 animate-spin" />
-                                    <span>Encrypting & Uploading...</span>
+                                    <span>Uploading... {progress}%</span>
+                                    <div className="absolute bottom-0 left-0 h-1 bg-white/20 w-full rounded-b-xl overflow-hidden">
+                                        <div
+                                            className="h-full bg-white/50 transition-all duration-300 ease-out"
+                                            style={{ width: `${progress}%` }}
+                                        />
+                                    </div>
                                 </>
-                            ) : (
-                                <>
-                                    <span>Create Secure Link</span>
                                 </>
+                        ) : (
+                        <>
+                            <span>Create Secure Link</span>
+                        </>
                             )}
-                        </button>
+                    </button>
                     </motion.div>
-                ) : (
-                    <motion.div
-                        key="success"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="flex flex-col items-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl"
+            ) : (
+            <motion.div
+                key="success"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex flex-col items-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl"
+            >
+                <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6">
+                    <Check className="w-10 h-10 text-emerald-400" />
+                </div>
+
+                <h3 className="text-2xl font-bold text-white mb-2">Ready to Share</h3>
+                <p className="text-white/50 text-center mb-8 max-w-xs">
+                    This unique code grants access to your file for the next 24 hours.
+                </p>
+
+                <div className="relative w-full mb-8 group">
+                    <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="relative bg-black/40 border border-white/10 rounded-xl p-6 flex flex-col items-center gap-2">
+                        <span className="text-sm text-white/30 uppercase tracking-widest font-semibold">Security Code</span>
+                        <span className="text-5xl font-mono font-bold text-white tracking-[0.2em]">{token}</span>
+                    </div>
+                </div>
+
+                <div className="flex gap-3 w-full">
+                    <button
+                        onClick={copyToken}
+                        className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium transition-colors flex items-center justify-center gap-2"
                     >
-                        <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6">
-                            <Check className="w-10 h-10 text-emerald-400" />
-                        </div>
-
-                        <h3 className="text-2xl font-bold text-white mb-2">Ready to Share</h3>
-                        <p className="text-white/50 text-center mb-8 max-w-xs">
-                            This unique code grants access to your file for the next 24 hours.
-                        </p>
-
-                        <div className="relative w-full mb-8 group">
-                            <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <div className="relative bg-black/40 border border-white/10 rounded-xl p-6 flex flex-col items-center gap-2">
-                                <span className="text-sm text-white/30 uppercase tracking-widest font-semibold">Security Code</span>
-                                <span className="text-5xl font-mono font-bold text-white tracking-[0.2em]">{token}</span>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-3 w-full">
-                            <button
-                                onClick={copyToken}
-                                className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium transition-colors flex items-center justify-center gap-2"
-                            >
-                                <Copy className="w-4 h-4" />
-                                Copy Code
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setToken(null);
-                                    setFile(null);
-                                }}
-                                className="flex-1 py-3 bg-transparent hover:bg-white/5 text-white/60 hover:text-white rounded-xl transition-colors text-sm"
-                            >
-                                Send Another
-                            </button>
-                        </div>
-                    </motion.div>
+                        <Copy className="w-4 h-4" />
+                        Copy Code
+                    </button>
+                    <button
+                        onClick={() => {
+                            setToken(null);
+                            setFile(null);
+                        }}
+                        className="flex-1 py-3 bg-transparent hover:bg-white/5 text-white/60 hover:text-white rounded-xl transition-colors text-sm"
+                    >
+                        Send Another
+                    </button>
+                </div>
+            </motion.div>
                 )}
-            </AnimatePresence>
-        </div>
+        </AnimatePresence>
+        </div >
     );
 }
