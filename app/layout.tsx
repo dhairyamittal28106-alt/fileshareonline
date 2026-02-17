@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "ShareDrop",
   description: "Secure P2P File Sharing",
+  verification: {
+    google: "CT84VWyCxVbSaCjr40xwWrbiyvTI42n69v1r67D5Ycg",
+  },
 };
 
 export default function RootLayout({
