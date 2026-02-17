@@ -12,6 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Metadata
 export const metadata: Metadata = {
   title: "ShareDrop",
   description: "Secure P2P File Sharing",
