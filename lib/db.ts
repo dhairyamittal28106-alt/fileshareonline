@@ -41,3 +41,14 @@ export async function getMetadata(token: string): Promise<FileMetadata | null> {
   const data = await redis.get(token);
   return data ? JSON.parse(data) : null;
 }
+
+export async function incrementTotalFiles() {
+  if (!redis) return 0;
+  return await redis.incr('stats:total_files');
+}
+
+export async function getTotalFiles() {
+  if (!redis) return 0;
+  const count = await redis.get('stats:total_files');
+  return count ? parseInt(count, 10) : 0;
+}

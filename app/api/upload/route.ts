@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { saveMetadata } from '@/lib/db';
+import { saveMetadata, incrementTotalFiles } from '@/lib/db';
 import crypto from 'crypto';
 
 export async function POST(req: NextRequest) {
@@ -40,6 +40,9 @@ export async function POST(req: NextRequest) {
                 fileKey: key, // Pass the key for cleanup
                 createdAt: Date.now(),
             });
+
+            // Increment total files count
+            await incrementTotalFiles();
         } catch (dbError: unknown) {
             console.error('Database Error:', dbError);
             const errorMessage = dbError instanceof Error ? dbError.message : 'Unknown error';

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Share2, UploadCloud, ShieldCheck, Zap } from 'lucide-react';
 import FileUploader from '@/components/FileUploader';
 import FileReceiver from '@/components/FileReceiver';
+import TotalFilesCounter from '@/components/TotalFilesCounter';
 import { clsx } from "clsx";
 
 export default function Home() {
@@ -45,6 +46,9 @@ export default function Home() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
             </span>
             Secure P2P File Sharing
+          </div>
+          <div className="flex justify-center mb-8">
+            <TotalFilesCounter />
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight leading-tight">
             Share files securely,<br />
