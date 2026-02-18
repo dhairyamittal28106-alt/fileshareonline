@@ -18,6 +18,7 @@ export type FileMetadata = {
   mimeType: string;
   size: number;
   filePath: string; // Blob URL
+  textContent?: string; // For text sharing
   fileKey?: string; // UploadThing Key
   createdAt: number;
 };

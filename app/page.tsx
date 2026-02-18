@@ -6,10 +6,12 @@ import { Share2, UploadCloud, ShieldCheck, Zap } from 'lucide-react';
 import FileUploader from '@/components/FileUploader';
 import FileReceiver from '@/components/FileReceiver';
 import TotalFilesCounter from '@/components/TotalFilesCounter';
+import TextSharer from '@/components/TextSharer';
 import { clsx } from "clsx";
 
 export default function Home() {
   const [mode, setMode] = useState<'send' | 'receive'>('send');
+  const [shareType, setShareType] = useState<'file' | 'text'>('file');
 
   return (
     <main className="min-h-screen relative overflow-hidden flex flex-col bg-[#020617] text-white">
@@ -45,24 +47,24 @@ export default function Home() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
             </span>
-            Secure P2P File Sharing
+            Secure P2P Sharing
           </div>
           <div className="flex justify-center mb-8">
             <TotalFilesCounter />
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight leading-tight">
-            Share files securely,<br />
+            Share <span className="text-indigo-400">anything</span> securely,<br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400">without limits.</span>
           </h1>
           <p className="text-lg text-white/40 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Simple, fast, and anonymous file sharing. No registration required.
-            Files are end-to-end encrypted and deleted automatically after 24 hours.
+            Simple, fast, and anonymous sharing. Text or Files. No registration.
+            Content is encrypted and deleted automatically after 24 hours.
           </p>
         </motion.div>
 
         {/* Interactive Area */}
         <div className="w-full max-w-xl mx-auto relative z-20">
-          {/* Mode Switcher */}
+          {/* Main Mode Switcher */}
           <div className="flex justify-center mb-8">
             <div className="bg-white/5 p-1.5 rounded-2xl border border-white/10 backdrop-blur-md flex shadow-2xl">
               <button
@@ -74,7 +76,7 @@ export default function Home() {
                     : "text-white/50 hover:text-white hover:bg-white/5"
                 )}
               >
-                Send File
+                Send
               </button>
               <button
                 onClick={() => setMode('receive')}
@@ -85,23 +87,60 @@ export default function Home() {
                     : "text-white/50 hover:text-white hover:bg-white/5"
                 )}
               >
-                Receive File
+                Receive
               </button>
             </div>
           </div>
+
+          {/* Sub Mode Switcher (File vs Text) - Only visible in SEND mode */}
+          <AnimatePresence>
+            {mode === 'send' && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="flex justify-center mb-6 overflow-hidden"
+              >
+                <div className="bg-black/20 p-1 rounded-xl flex gap-1">
+                  <button
+                    onClick={() => setShareType('file')}
+                    className={clsx(
+                      "px-4 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all",
+                      shareType === 'file' ? "bg-white/10 text-white" : "text-white/40 hover:text-white"
+                    )}
+                  >
+                    File
+                  </button>
+                  <button
+                    onClick={() => setShareType('text')}
+                    className={clsx(
+                      "px-4 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all",
+                      shareType === 'text' ? "bg-white/10 text-white" : "text-white/40 hover:text-white"
+                    )}
+                  >
+                    Text
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Component View */}
           <div className="min-h-[400px]">
             <AnimatePresence mode="wait">
               <motion.div
-                key={mode}
+                key={mode + shareType}
                 initial={{ opacity: 0, x: mode === 'send' ? -20 : 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: mode === 'send' ? 20 : -20 }}
                 transition={{ duration: 0.3 }}
                 className="w-full"
               >
-                {mode === 'send' ? <FileUploader /> : <FileReceiver />}
+                {mode === 'send' ? (
+                  shareType === 'file' ? <FileUploader /> : <TextSharer />
+                ) : (
+                  <FileReceiver />
+                )}
               </motion.div>
             </AnimatePresence>
           </div>
