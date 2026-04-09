@@ -14,8 +14,11 @@ const geistMono = Geist_Mono({
 
 // Metadata
 export const metadata: Metadata = {
-  title: "ShareDrop",
+  title: "SHAREDROP",
   description: "Secure P2P File Sharing",
+  other: {
+    "google-adsense-account": "ca-pub-8295491395007414"
+  },
   verification: {
     google: "vQRyg2EFVrK_goOXF3R6bQPn0uXhSlzUmkOAbdzgb28",
   },
