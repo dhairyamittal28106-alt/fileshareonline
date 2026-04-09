@@ -28,7 +28,20 @@ export default function AdSidebar({ side }: AdSidebarProps) {
     return (
         <motion.div
             initial={{ opacity: 0, x: side === 'left' ? -20 : 20 }}
-            animate={{ opacity: 1, x: 0 }}
+            animate={{ 
+                opacity: 1, 
+                x: 0,
+                y: [0, -10, 0]
+            }}
+            transition={{
+                opacity: { duration: 0.5 },
+                x: { duration: 0.5 },
+                y: { 
+                    duration: 5, 
+                    repeat: Infinity, 
+                    ease: "easeInOut" 
+                }
+            }}
             className={`hidden md:flex flex-col gap-4 w-[200px] lg:w-[320px] h-fit sticky top-24 ${side === 'left' ? 'items-end' : 'items-start'}`}
         >
             <div className="w-full bg-white/5 border border-indigo-500/20 rounded-2xl p-4 backdrop-blur-md overflow-hidden relative group">
@@ -73,7 +86,11 @@ export default function AdSidebar({ side }: AdSidebarProps) {
                 </div>
             </div>
 
-            <div className="w-full bg-indigo-500/5 border border-indigo-500/10 rounded-2xl p-4 backdrop-blur-md relative group">
+            <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="w-full bg-indigo-500/5 border border-indigo-500/10 rounded-2xl p-4 backdrop-blur-md relative group overflow-hidden"
+            >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-indigo-500/10 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite] pointer-events-none" />
                 <a 
                     href="https://ruffianattorneymargarine.com/aair0is5w?key=05a5c7db7052d86884ba1d139263a33a" 
                     target="_blank" 
@@ -84,11 +101,11 @@ export default function AdSidebar({ side }: AdSidebarProps) {
                         <div className="h-2 w-1/2 bg-indigo-500/20 rounded group-hover/link:bg-indigo-500/40 transition-colors" />
                         <ExternalLink className="w-3 h-3 text-indigo-500/40" />
                     </div>
-                    <div className="h-24 w-full bg-indigo-500/10 rounded-xl border border-indigo-500/5 flex items-center justify-center group-hover/link:bg-indigo-500/15 transition-all">
+                    <div className="relative h-24 w-full bg-indigo-500/10 rounded-xl border border-indigo-500/5 flex items-center justify-center group-hover/link:bg-indigo-500/15 transition-all">
                         <span className="text-indigo-400/40 text-[9px] font-bold uppercase tracking-[0.3em] group-hover/link:text-indigo-400 transition-colors">Access Portal →</span>
                     </div>
                 </a>
-            </div>
+            </motion.div>
         </motion.div>
     );
 }

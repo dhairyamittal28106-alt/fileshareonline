@@ -12,6 +12,7 @@ export default function FileUploader() {
     const [token, setToken] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [origin, setOrigin] = useState('');
+    const [isDragging, setIsDragging] = useState(false);
 
     useEffect(() => {
         setOrigin(window.location.origin);
@@ -115,13 +116,20 @@ export default function FileUploader() {
                         {/* Dropzone */}
                         <div
                             className={twMerge(
-                                "group relative w-full border-2 border-dashed border-white/10 hover:border-indigo-500/50 rounded-2xl transition-all duration-300 ease-out bg-white/5 hover:bg-white/10 flex flex-col cursor-pointer overflow-hidden",
-                                files.length > 0 ? "border-indigo-500/50 bg-indigo-500/5 min-h-[14rem] md:min-h-[16rem]" : "h-48 md:h-64 items-center justify-center"
+                                "group relative w-full border-2 border-dashed rounded-3xl transition-all duration-500 ease-out flex flex-col cursor-pointer overflow-hidden",
+                                isDragging 
+                                    ? "border-indigo-500 bg-indigo-500/10 shadow-[0_0_50px_-12px_rgba(99,102,241,0.5)] scale-[0.99]" 
+                                    : "border-white/10 bg-white/5 hover:border-indigo-500/40 hover:bg-white/[0.07]",
+                                files.length > 0 ? "min-h-[14rem] md:min-h-[16rem]" : "h-48 md:h-64 items-center justify-center"
                             )}
-                            onDragOver={(e) => e.preventDefault()}
-                            onDrop={handleDrop}
+                            onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                            onDragLeave={() => setIsDragging(false)}
+                            onDrop={(e) => { setIsDragging(false); handleDrop(e); }}
                             onClick={() => document.getElementById('file-input')?.click()}
                         >
+                            {/* Interactive Background Glow */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                            
                             <input
                                 type="file"
                                 id="file-input"
@@ -133,12 +141,12 @@ export default function FileUploader() {
                             {files.length > 0 ? (
                                 <div className="flex flex-col z-10 p-6 w-full gap-4 max-h-[400px] overflow-y-auto">
                                     <div className="flex items-center justify-between mb-2">
-                                        <h4 className="text-white/60 text-sm font-medium uppercase tracking-wider">
+                                        <h4 className="text-white/60 text-xs font-black uppercase tracking-widest">
                                             Selected {files.length} {files.length === 1 ? 'file' : 'files'}
                                         </h4>
                                         <button
                                             onClick={(e) => { e.stopPropagation(); setFiles([]); }}
-                                            className="text-white/40 hover:text-white text-xs transition-colors"
+                                            className="text-white/40 hover:text-white text-[10px] font-black uppercase tracking-wider transition-colors"
                                         >
                                             Clear All
                                         </button>
@@ -150,15 +158,15 @@ export default function FileUploader() {
                                                 initial={{ opacity: 0, x: -10 }}
                                                 animate={{ opacity: 1, x: 0 }}
                                                 exit={{ opacity: 0, scale: 0.95 }}
-                                                className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5"
+                                                className="flex items-center justify-between p-3 bg-white/5 rounded-2xl border border-white/5 backdrop-blur-md"
                                             >
                                                 <div className="flex items-center gap-3 overflow-hidden">
-                                                    <div className="w-10 h-10 bg-indigo-500/20 rounded-lg flex items-center justify-center shrink-0">
+                                                    <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center shrink-0 border border-indigo-500/20">
                                                         <File className="w-5 h-5 text-indigo-400" />
                                                     </div>
                                                     <div className="overflow-hidden">
-                                                        <p className="text-white text-sm font-medium truncate">{file.name}</p>
-                                                        <p className="text-white/40 text-[10px]">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                                                        <p className="text-white text-sm font-bold truncate">{file.name}</p>
+                                                        <p className="text-white/40 text-[10px] font-black uppercase tracking-tighter">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                                                     </div>
                                                 </div>
                                                 <button
@@ -173,17 +181,20 @@ export default function FileUploader() {
                                             </motion.div>
                                         ))}
                                     </AnimatePresence>
-                                    <div className="mt-2 py-4 border-t border-white/5 flex flex-col items-center">
-                                        <p className="text-white/30 text-xs italic">Drop more files or click to add</p>
-                                    </div>
                                 </div>
                             ) : (
                                 <div className="flex flex-col items-center z-10 pointer-events-none p-4">
-                                    <div className="w-12 h-12 md:w-16 md:h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                                        <Upload className="w-6 h-6 md:w-8 md:h-8 text-white/40 group-hover:text-indigo-400 transition-colors" />
+                                    <motion.div 
+                                        animate={{ y: [0, -8, 0] }}
+                                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                        className="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-6 border border-indigo-500/20 group-hover:bg-indigo-500/20 group-hover:border-indigo-500/40 transition-all duration-300"
+                                    >
+                                        <Upload className="w-8 h-8 text-indigo-400 group-hover:scale-110 transition-transform" />
+                                    </motion.div>
+                                    <p className="text-white font-[900] text-3xl md:text-4xl tracking-tighter uppercase mb-4">DROP FILES HERE</p>
+                                    <div className="px-6 py-3 bg-white/5 rounded-2xl border border-white/10 text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-white/40 group-hover:text-indigo-300 group-hover:border-indigo-500/30 transition-all">
+                                        OR CLICK TO BROWSE DEVICE
                                     </div>
-                                    <p className="text-white/80 font-medium text-base md:text-lg">Drop your files here</p>
-                                    <p className="text-white/40 text-xs md:text-sm mt-2">or click to browse multiple files</p>
                                 </div>
                             )}
                         </div>
@@ -206,24 +217,41 @@ export default function FileUploader() {
                         <button
                             onClick={() => uploadFile()}
                             disabled={files.length === 0 || isUploading}
-                            className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium shadow-lg shadow-indigo-900/20 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold shadow-lg shadow-indigo-600/20 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group/btn"
                         >
-                            {isUploading ? (
-                                <>
-                                    <Loader2 className="w-5 h-5 animate-spin" />
-                                    <span>Uploading... {progress}%</span>
-                                    <div className="absolute bottom-0 left-0 h-1 bg-white/20 w-full rounded-b-xl overflow-hidden">
-                                        <div
-                                            className="h-full bg-white/50 transition-all duration-300 ease-out"
-                                            style={{ width: `${progress}%` }}
-                                        />
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <span>Create Secure Link</span>
-                                </>
-                            )}
+                            <AnimatePresence mode="wait">
+                                {isUploading ? (
+                                    <motion.div 
+                                        key="uploading"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        className="flex items-center justify-center gap-2"
+                                    >
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        <span>Encrypting... {progress}%</span>
+                                        <div className="absolute bottom-0 left-0 h-1.5 w-full bg-white/10">
+                                            <motion.div 
+                                                className="h-full bg-white/40"
+                                                initial={{ width: 0 }}
+                                                animate={{ width: `${progress}%` }}
+                                                transition={{ type: "spring", stiffness: 50, damping: 20 }}
+                                            />
+                                        </div>
+                                    </motion.div>
+                                ) : (
+                                    <motion.div 
+                                        key="idle"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        className="flex items-center justify-center gap-2"
+                                    >
+                                        <span>Create Secure Link</span>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_2s_infinite] pointer-events-none" />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </button>
                     </motion.div>
                 ) : (

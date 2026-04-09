@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from 'next/script';
+import BackgroundEffects from '@/components/BackgroundEffects';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -49,9 +50,12 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#020617] min-h-screen relative`}
       >
-        {children}
+        <BackgroundEffects />
+        <main className="relative z-10">
+          {children}
+        </main>
         {/* Social Bar (Anti-Adblock) */}
         <Script 
           src="https://ruffianattorneymargarine.com/0d/14/aa/0d14aa83af9eea8f8000642c5b5aebf.js" 

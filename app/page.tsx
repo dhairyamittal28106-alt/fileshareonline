@@ -8,6 +8,9 @@ import FileReceiver from '@/components/FileReceiver';
 import TotalFilesCounter from '@/components/TotalFilesCounter';
 import TextSharer from '@/components/TextSharer';
 import Sidebar from '@/components/Sidebar';
+import Navbar from '@/components/Navbar';
+import TrustIndicators from '@/components/TrustIndicators';
+import HowItWorks from '@/components/HowItWorks';
 import { clsx } from "clsx";
 import { useSearchParams } from 'next/navigation';
 
@@ -105,30 +108,10 @@ function InteractiveArea() {
 
 export default function Home() {
   return (
-    <main className="min-h-screen relative overflow-hidden flex flex-col bg-[#020617] text-white">
-      {/* Background Gradients */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/20 via-[#020617] to-[#020617]" />
-      <div className="fixed inset-0 z-0 pointer-events-none opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150 mix-blend-overlay" />
+    <main className="min-h-screen relative overflow-hidden flex flex-col bg-[#020617] text-white selection:bg-indigo-500/30">
+      <Navbar />
 
-      {/* Navbar */}
-      <nav className="relative z-10 w-full max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-        <div className="flex items-center gap-3 md:gap-4">
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center overflow-hidden shadow-lg shadow-indigo-500/10">
-            <img src="/logo.png" alt="SHAREDROP Logo" className="w-full h-full object-cover p-1.5" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xl md:text-2xl font-black tracking-tighter text-white leading-none">SHAREDROP</span>
-            <span className="text-[8px] md:text-[9px] text-white/40 uppercase tracking-[0.2em] md:tracking-[0.25em] mt-1 font-bold">Fast • Secure • Seamless</span>
-          </div>
-        </div>
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/60">
-          <a href="#" className="hover:text-white transition-colors">Features</a>
-          <a href="#" className="hover:text-white transition-colors">Security</a>
-          <a href="#" className="hover:text-white transition-colors">About</a>
-        </div>
-      </nav>
-
-        <div className="flex justify-center gap-6 lg:gap-12 relative w-full overflow-hidden">
+      <div className="flex justify-center gap-6 lg:gap-12 relative w-full overflow-hidden">
           {/* Left Sidebar */}
           <div className="hidden md:block shrink-0 pt-24">
             <Sidebar side="left" />
@@ -161,43 +144,78 @@ export default function Home() {
               </p>
             </motion.div>
 
-            {/* Interactive Area with Suspense for useSearchParams */}
             <Suspense fallback={<div className="w-full max-w-xl mx-auto h-[400px] flex items-center justify-center"><div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div></div>}>
               <InteractiveArea />
             </Suspense>
 
-            {/* Features & Trust */}
-            <div className="mt-24 w-full border-t border-white/5 pt-16">
+            <TrustIndicators />
+
+            {/* Features & Trust with Staggered Reveal */}
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.15 }
+                }
+              }}
+              className="mt-24 w-full border-t border-white/5 pt-16"
+            >
               <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                  <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mb-4 border border-white/5">
-                    <UploadCloud className="w-6 h-6 text-indigo-400" />
+                <motion.div 
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 }
+                  }}
+                  className="flex flex-col items-center md:items-start text-center md:text-left group"
+                >
+                  <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mb-4 border border-white/5 group-hover:border-indigo-500/50 group-hover:bg-indigo-500/10 transition-all duration-300">
+                    <UploadCloud className="w-6 h-6 text-indigo-400 group-hover:scale-110 transition-transform" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">No File Size Limits</h3>
+                  <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-indigo-300 transition-colors">No File Size Limits</h3>
                   <p className="text-white/40 text-sm leading-relaxed">
                     Share large files, HD videos, or entire project folders without hitting a paywall.
                   </p>
-                </div>
-                <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                  <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mb-4 border border-white/5">
-                    <ShieldCheck className="w-6 h-6 text-emerald-400" />
+                </motion.div>
+
+                <motion.div 
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 }
+                  }}
+                  className="flex flex-col items-center md:items-start text-center md:text-left group"
+                >
+                  <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mb-4 border border-white/5 group-hover:border-emerald-500/50 group-hover:bg-emerald-500/10 transition-all duration-300">
+                    <ShieldCheck className="w-6 h-6 text-emerald-400 group-hover:scale-110 transition-transform" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">Bank-Grade Encryption</h3>
+                  <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-emerald-300 transition-colors">Bank-Grade Encryption</h3>
                   <p className="text-white/40 text-sm leading-relaxed">
                     Your files are encrypted in transit and at rest. We can&apos;t see what you share.
                   </p>
-                </div>
-                <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                  <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mb-4 border border-white/5">
-                    <Zap className="w-6 h-6 text-amber-400" />
+                </motion.div>
+
+                <motion.div 
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 }
+                  }}
+                  className="flex flex-col items-center md:items-start text-center md:text-left group"
+                >
+                  <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mb-4 border border-white/5 group-hover:border-amber-500/50 group-hover:bg-amber-500/10 transition-all duration-300">
+                    <Zap className="w-6 h-6 text-amber-400 group-hover:scale-110 transition-transform" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">Lightning Fast</h3>
+                  <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-amber-300 transition-colors">Lightning Fast</h3>
                   <p className="text-white/40 text-sm leading-relaxed">
                     Optimized peer routing ensures you get the fastest possible upload and download speeds.
                   </p>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
+
+            <HowItWorks />
 
             <footer className="w-full mt-24 border-t border-white/5 py-8 text-center text-white/20 text-sm">
               <p>&copy; 2026 SHAREDROP. Crafted for privacy.</p>

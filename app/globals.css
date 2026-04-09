@@ -18,6 +18,11 @@
 }
 
 /* Force Dark Mode Background */
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
 @layer base {
   body {
     background-color: #020617;
