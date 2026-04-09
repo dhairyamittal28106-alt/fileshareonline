@@ -7,7 +7,7 @@ import FileUploader from '@/components/FileUploader';
 import FileReceiver from '@/components/FileReceiver';
 import TotalFilesCounter from '@/components/TotalFilesCounter';
 import TextSharer from '@/components/TextSharer';
-import AdSidebar from '@/components/AdSidebar';
+import Sidebar from '@/components/Sidebar';
 import { clsx } from "clsx";
 import { useSearchParams } from 'next/navigation';
 
@@ -128,14 +128,13 @@ export default function Home() {
         </div>
       </nav>
 
-      <div className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-4 py-12">
-        <div className="flex justify-between gap-8 lg:gap-12">
-          {/* Left Ad Sidebar */}
-          <div className="hidden lg:block shrink-0 pt-24">
-            <AdSidebar side="left" />
+        <div className="flex justify-center gap-6 lg:gap-12 relative">
+          {/* Left Sidebar */}
+          <div className="shrink-0 pt-24">
+            <Sidebar side="left" />
           </div>
 
-          <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-200px)] max-w-3xl mx-auto">
+          <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-200px)] max-w-4xl mx-auto w-full relative z-10">
             {/* Hero Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -205,12 +204,11 @@ export default function Home() {
             </footer>
           </div>
 
-          {/* Right Ad Sidebar */}
-          <div className="hidden lg:block shrink-0 pt-24">
-            <AdSidebar side="right" />
+          {/* Right Sidebar */}
+          <div className="shrink-0 pt-24">
+            <Sidebar side="right" />
           </div>
         </div>
-      </div>
     </main>
   );
 }

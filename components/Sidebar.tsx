@@ -29,27 +29,30 @@ export default function AdSidebar({ side }: AdSidebarProps) {
         <motion.div
             initial={{ opacity: 0, x: side === 'left' ? -20 : 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className={`hidden lg:flex flex-col gap-4 w-[320px] h-fit sticky top-24 ${side === 'left' ? 'items-end' : 'items-start'}`}
+            className={`hidden md:flex flex-col gap-4 w-[200px] lg:w-[320px] h-fit sticky top-24 ${side === 'left' ? 'items-end' : 'items-start'}`}
         >
-            <div className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-md overflow-hidden relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="w-full bg-white/5 border border-indigo-500/20 rounded-2xl p-4 backdrop-blur-md overflow-hidden relative group">
+                {/* Temporary diagnostic border to ensure visibility */}
+                <div className="absolute inset-0 border border-indigo-500/10 pointer-events-none rounded-2xl" />
                 
                 <div className="flex items-center gap-2 mb-4">
                     <Tag className="w-3 h-3 text-white/30" />
-                    <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">Sponsored Content</span>
+                    <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">Partner Content</span>
                 </div>
 
                 <div className="flex flex-col gap-3 min-h-[250px] items-center justify-center">
                     {side === 'left' ? (
-                        <>
+                        <div className="w-full">
                             {/* Native Banner Ad */}
                             <script async={true} data-cfasync="false" src="https://pl29104319.profitablecpmratenetwork.com/09251a11f78920bcfe4fd626609c5fae/invoke.js"></script>
-                            <div id="container-09251a11f78920bcfe4fd626609c5fae" className="w-full"></div>
-                        </>
+                            <div id="container-09251a11f78920bcfe4fd626609c5fae" className="w-full min-h-[200px] border border-white/5 rounded-lg flex items-center justify-center">
+                                <span className="text-white/5 text-[10px] tracking-widest uppercase">Loading...</span>
+                            </div>
+                        </div>
                     ) : (
-                        <>
+                        <div className="w-full h-full flex items-center justify-center">
                             {/* 300x250 Banner Ad */}
-                            <div className="relative">
+                            <div className="relative w-full flex justify-center">
                                 <script dangerouslySetInnerHTML={{
                                     __html: `
                                         atOptions = {
@@ -61,11 +64,11 @@ export default function AdSidebar({ side }: AdSidebarProps) {
                                         };
                                     `
                                 }} />
-                                <div id="ad-300x250-container" className="w-[300px] h-[250px] bg-white/5 rounded-xl border border-white/10 flex items-center justify-center">
-                                    <p className="text-[10px] text-white/10 uppercase tracking-[0.2em]">Loading Advertisement...</p>
+                                <div id="display-frame-300x250" className="w-[300px] h-[250px] bg-white/5 rounded-xl border border-white/10 flex items-center justify-center">
+                                    <p className="text-[10px] text-white/10 uppercase tracking-[0.2em]">Partner Feed</p>
                                 </div>
                             </div>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
@@ -82,7 +85,7 @@ export default function AdSidebar({ side }: AdSidebarProps) {
                         <ExternalLink className="w-3 h-3 text-indigo-500/40" />
                     </div>
                     <div className="h-24 w-full bg-indigo-500/10 rounded-xl border border-indigo-500/5 flex items-center justify-center group-hover/link:bg-indigo-500/15 transition-all">
-                        <span className="text-indigo-400/40 text-[9px] font-bold uppercase tracking-[0.3em] group-hover/link:text-indigo-400 transition-colors">Premium Link →</span>
+                        <span className="text-indigo-400/40 text-[9px] font-bold uppercase tracking-[0.3em] group-hover/link:text-indigo-400 transition-colors">Sponsored Link →</span>
                     </div>
                 </a>
             </div>
