@@ -78,9 +78,9 @@ export default function FileReceiver({ initialToken = '' }: { initialToken?: str
                     className="flex flex-col gap-6"
                 >
                     <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 flex flex-col items-center">
-                        <div className="mb-6 text-center">
-                            <h3 className="text-xl font-semibold text-white mb-2">Have a code?</h3>
-                            <p className="text-white/40 text-sm">Enter the 6-digit secure code to access the shared content.</p>
+                        <div className="mb-4 md:mb-6 text-center">
+                            <h3 className="text-lg md:text-xl font-semibold text-white mb-2">Have a code?</h3>
+                            <p className="text-white/40 text-xs md:text-sm">Enter the 6-digit secure code to access the shared content.</p>
                         </div>
 
                         <div className="relative w-full max-w-xs mb-6">
@@ -93,7 +93,7 @@ export default function FileReceiver({ initialToken = '' }: { initialToken?: str
                                     if (val.length === 6) setError(null);
                                 }}
                                 placeholder="000000"
-                                className="w-full bg-black/40 border border-white/10 focus:border-indigo-500 rounded-xl py-4 text-center text-3xl font-mono tracking-[0.25em] text-white placeholder:text-white/10 outline-none transition-all"
+                                className="w-full bg-black/40 border border-white/10 focus:border-indigo-500 rounded-xl py-3 md:py-4 text-center text-2xl md:text-3xl font-mono tracking-[0.2em] md:tracking-[0.25em] text-white placeholder:text-white/10 outline-none transition-all"
                             />
                         </div>
 
@@ -136,8 +136,8 @@ export default function FileReceiver({ initialToken = '' }: { initialToken?: str
                                             {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-white/60" />}
                                         </button>
                                     </div>
-                                    <h3 className="text-lg font-semibold text-white mb-3">Shared Text</h3>
-                                    <div className="w-full max-h-96 overflow-y-auto bg-black/40 rounded-xl p-4 border border-white/10 text-white/80 font-mono text-sm whitespace-pre-wrap">
+                                    <h3 className="text-base md:text-lg font-semibold text-white mb-3">Shared Text</h3>
+                                    <div className="w-full max-h-[300px] md:max-h-96 overflow-y-auto bg-black/40 rounded-xl p-4 border border-white/10 text-white/80 font-mono text-xs md:text-sm whitespace-pre-wrap leading-relaxed">
                                         {fileData.textContent}
                                     </div>
                                 </div>

@@ -112,13 +112,13 @@ export default function Home() {
 
       {/* Navbar */}
       <nav className="relative z-10 w-full max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center overflow-hidden shadow-lg shadow-indigo-500/10">
-            <img src="/logo.png" alt="ShareDrop Logo" className="w-full h-full object-cover p-1.5" />
+        <div className="flex items-center gap-3 md:gap-4">
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center overflow-hidden shadow-lg shadow-indigo-500/10">
+            <img src="/logo.png" alt="SHAREDROP Logo" className="w-full h-full object-cover p-1.5" />
           </div>
           <div className="flex flex-col">
-            <span className="text-2xl font-black tracking-tighter text-white leading-none">SHAREDROP</span>
-            <span className="text-[9px] text-white/40 uppercase tracking-[0.25em] mt-1 font-bold">Fast • Secure • Seamless</span>
+            <span className="text-xl md:text-2xl font-black tracking-tighter text-white leading-none">SHAREDROP</span>
+            <span className="text-[8px] md:text-[9px] text-white/40 uppercase tracking-[0.2em] md:tracking-[0.25em] mt-1 font-bold">Fast • Secure • Seamless</span>
           </div>
         </div>
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/60">
@@ -128,9 +128,9 @@ export default function Home() {
         </div>
       </nav>
 
-        <div className="flex justify-center gap-6 lg:gap-12 relative">
+        <div className="flex justify-center gap-6 lg:gap-12 relative w-full overflow-hidden">
           {/* Left Sidebar */}
-          <div className="shrink-0 pt-24">
+          <div className="hidden md:block shrink-0 pt-24">
             <Sidebar side="left" />
           </div>
 
@@ -148,14 +148,14 @@ export default function Home() {
                 </span>
                 Secure P2P Sharing
               </div>
-              <div className="flex justify-center mb-8">
+              <div className="flex justify-center mb-6 md:mb-8 scale-90 md:scale-100">
                 <TotalFilesCounter />
               </div>
-              <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight leading-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight leading-[1.1] md:leading-tight">
                 Share <span className="text-indigo-400">anything</span> securely,<br />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400">without limits.</span>
               </h1>
-              <p className="text-lg text-white/40 mb-10 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-base md:text-lg text-white/40 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed px-4 md:px-0">
                 Simple, fast, and anonymous sharing. Text or Files. No registration.
                 Content is encrypted and deleted automatically after 15 minutes.
               </p>
@@ -205,7 +205,7 @@ export default function Home() {
           </div>
 
           {/* Right Sidebar */}
-          <div className="shrink-0 pt-24">
+          <div className="hidden md:block shrink-0 pt-24">
             <Sidebar side="right" />
           </div>
         </div>

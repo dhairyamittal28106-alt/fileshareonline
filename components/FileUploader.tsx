@@ -110,13 +110,13 @@ export default function FileUploader() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="flex flex-col gap-6"
+                        className="flex flex-col gap-4 md:gap-6"
                     >
                         {/* Dropzone */}
                         <div
                             className={twMerge(
                                 "group relative w-full border-2 border-dashed border-white/10 hover:border-indigo-500/50 rounded-2xl transition-all duration-300 ease-out bg-white/5 hover:bg-white/10 flex flex-col cursor-pointer overflow-hidden",
-                                files.length > 0 ? "border-indigo-500/50 bg-indigo-500/5 min-h-[16rem]" : "h-64 items-center justify-center"
+                                files.length > 0 ? "border-indigo-500/50 bg-indigo-500/5 min-h-[14rem] md:min-h-[16rem]" : "h-48 md:h-64 items-center justify-center"
                             )}
                             onDragOver={(e) => e.preventDefault()}
                             onDrop={handleDrop}
@@ -178,12 +178,12 @@ export default function FileUploader() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center z-10 pointer-events-none">
-                                    <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                                        <Upload className="w-8 h-8 text-white/40 group-hover:text-indigo-400 transition-colors" />
+                                <div className="flex flex-col items-center z-10 pointer-events-none p-4">
+                                    <div className="w-12 h-12 md:w-16 md:h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                                        <Upload className="w-6 h-6 md:w-8 md:h-8 text-white/40 group-hover:text-indigo-400 transition-colors" />
                                     </div>
-                                    <p className="text-white/80 font-medium text-lg">Drop your files here</p>
-                                    <p className="text-white/40 text-sm mt-2">or click to browse multiple files</p>
+                                    <p className="text-white/80 font-medium text-base md:text-lg">Drop your files here</p>
+                                    <p className="text-white/40 text-xs md:text-sm mt-2">or click to browse multiple files</p>
                                 </div>
                             )}
                         </div>

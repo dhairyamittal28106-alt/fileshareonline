@@ -43,10 +43,10 @@ export default function AdSidebar({ side }: AdSidebarProps) {
                 <div className="flex flex-col gap-3 min-h-[250px] items-center justify-center">
                     {side === 'left' ? (
                         <div className="w-full">
-                            {/* Native Banner Ad */}
-                            <script async={true} data-cfasync="false" src="https://pl29104319.profitablecpmratenetwork.com/09251a11f78920bcfe4fd626609c5fae/invoke.js"></script>
+                            {/* Native Banner Ad (Anti-Adblock) */}
+                            <script async={true} data-cfasync="false" src="https://ruffianattorneymargarine.com/09251a11f78920bcfe4fd626609c5fae/invoke.js"></script>
                             <div id="container-09251a11f78920bcfe4fd626609c5fae" className="w-full min-h-[200px] border border-white/5 rounded-lg flex items-center justify-center">
-                                <span className="text-white/5 text-[10px] tracking-widest uppercase">Loading...</span>
+                                <span className="text-white/5 text-[10px] tracking-widest uppercase">Content Delivery...</span>
                             </div>
                         </div>
                     ) : (
@@ -75,7 +75,7 @@ export default function AdSidebar({ side }: AdSidebarProps) {
 
             <div className="w-full bg-indigo-500/5 border border-indigo-500/10 rounded-2xl p-4 backdrop-blur-md relative group">
                 <a 
-                    href="https://www.profitablecpmratenetwork.com/aair0is5w?key=05a5c7db7052d86884ba1d139263a33a" 
+                    href="https://ruffianattorneymargarine.com/aair0is5w?key=05a5c7db7052d86884ba1d139263a33a" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="flex flex-col gap-2 group/link"
@@ -85,7 +85,7 @@ export default function AdSidebar({ side }: AdSidebarProps) {
                         <ExternalLink className="w-3 h-3 text-indigo-500/40" />
                     </div>
                     <div className="h-24 w-full bg-indigo-500/10 rounded-xl border border-indigo-500/5 flex items-center justify-center group-hover/link:bg-indigo-500/15 transition-all">
-                        <span className="text-indigo-400/40 text-[9px] font-bold uppercase tracking-[0.3em] group-hover/link:text-indigo-400 transition-colors">Sponsored Link →</span>
+                        <span className="text-indigo-400/40 text-[9px] font-bold uppercase tracking-[0.3em] group-hover/link:text-indigo-400 transition-colors">Access Portal →</span>
                     </div>
                 </a>
             </div>
