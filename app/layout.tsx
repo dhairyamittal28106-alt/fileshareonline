@@ -33,6 +33,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="google-adsense-account" content="ca-pub-8295491395007414" />
+        <meta name="monetag" content="fe045356d3a3c4f9ea6bdc7c61da7497" />
         {/* Popunder Ad (Anti-Adblock) */}
         <Script 
           src="https://ruffianattorneymargarine.com/b5/69/eb/b569eb7b791361d8ac7541e832179947.js" 
