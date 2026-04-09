@@ -14,12 +14,14 @@ if (!process.env.REDIS_URL) {
 
 export type FileMetadata = {
   token: string;
-  originalName: string;
-  mimeType: string;
-  size: number;
-  filePath: string; // Blob URL
+  files: Array<{
+    originalName: string;
+    mimeType: string;
+    size: number;
+    filePath: string; // Blob URL
+    fileKey?: string; // UploadThing Key
+  }>;
   textContent?: string; // For text sharing
-  fileKey?: string; // UploadThing Key
   createdAt: number;
 };
 
@@ -29,11 +31,14 @@ export async function saveMetadata(metadata: FileMetadata) {
   // 1. Save metadata with a 15-minute expiration (900 seconds)
   await redis.set(metadata.token, JSON.stringify(metadata), 'EX', 900);
 
-  // 2. Schedule for physical deletion (backup if user doesn't access it)
-  // We use a Sorted Set where Score = Expiration Timestamp
-  if (metadata.fileKey) {
+  // 2. Schedule all files for physical deletion
+  for (const file of metadata.files) {
     const expiresAt = Date.now() + 15 * 60 * 1000;
-    await redis.zadd('cleanup_schedule', expiresAt, JSON.stringify({ key: metadata.fileKey, token: metadata.token }));
+    await redis.zadd('cleanup_schedule', expiresAt, JSON.stringify({
+      url: file.filePath,
+      key: file.fileKey,
+      token: metadata.token
+    }));
   }
 }
 
@@ -52,4 +57,20 @@ export async function getTotalFiles() {
   if (!redis) return 0;
   const count = await redis.get('stats:total_files');
   return count ? parseInt(count, 10) : 0;
+}
+
+/**
+ * Triggers the cleanup API to purge expired files.
+ * This can be called "lazily" during other operations.
+ */
+export async function triggerCleanup() {
+  try {
+    // We call the API endpoint. In production, this might be a full URL.
+    // For local dev, we use localhost.
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    // We don't await this to keep it non-blocking
+    fetch(`${baseUrl}/api/cron/cleanup`, { method: 'GET' }).catch(console.error);
+  } catch (e) {
+    console.error('Failed to trigger cleanup:', e);
+  }
 }

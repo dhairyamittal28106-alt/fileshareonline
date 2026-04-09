@@ -1,15 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Type, Check, Copy, Loader2, X, Text } from 'lucide-react';
+import { Type, Check, Copy, Loader2, X, Text, QrCode, Share2 } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
+import { QRCodeSVG } from 'qrcode.react';
 
 export default function TextSharer() {
     const [text, setText] = useState('');
     const [loading, setLoading] = useState(false);
     const [token, setToken] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [origin, setOrigin] = useState('');
+
+    useEffect(() => {
+        setOrigin(window.location.origin);
+    }, []);
+
+    const shareUrl = `${origin}/?code=${token}`;
 
     const shareText = async () => {
         if (!text.trim()) return;
@@ -104,31 +112,62 @@ export default function TextSharer() {
 
                         <h3 className="text-2xl font-bold text-white mb-2">Text Shared</h3>
                         <p className="text-white/50 text-center mb-8 max-w-xs">
-                            Use this code to retrieve your text on any device.
+                            Scan the QR code or use the security code to retrieve your text.
+                            <span className="block mt-2 text-indigo-400 font-medium text-xs uppercase tracking-wider">Expires in 15 minutes</span>
                         </p>
 
-                        <div className="relative w-full mb-8 group">
-                            <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <div className="relative bg-black/40 border border-white/10 rounded-xl p-6 flex flex-col items-center gap-2">
-                                <span className="text-sm text-white/30 uppercase tracking-widest font-semibold">Security Code</span>
-                                <span className="text-5xl font-mono font-bold text-white tracking-[0.2em]">{token}</span>
+                        <div className="flex flex-col items-center gap-6 mb-8 w-full">
+                            {/* QR Code Section */}
+                            <div className="bg-white p-4 rounded-2xl shadow-2xl border-4 border-white/10">
+                                <QRCodeSVG
+                                    value={shareUrl}
+                                    size={160}
+                                    level="H"
+                                    includeMargin={false}
+                                />
+                            </div>
+
+                            <div className="relative w-full group">
+                                <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className="relative bg-black/40 border border-white/10 rounded-xl p-4 flex flex-col items-center gap-1">
+                                    <span className="text-[10px] text-white/30 uppercase tracking-widest font-semibold">Security Code</span>
+                                    <span className="text-4xl font-mono font-bold text-white tracking-[0.2em]">{token}</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="flex gap-3 w-full">
-                            <button
-                                onClick={copyToken}
-                                className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium transition-colors flex items-center justify-center gap-2"
-                            >
-                                <Copy className="w-4 h-4" />
-                                Copy Code
-                            </button>
+                        <div className="flex flex-col gap-3 w-full">
+                            <div className="flex gap-3 w-full">
+                                <button
+                                    onClick={copyToken}
+                                    className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium transition-colors flex items-center justify-center gap-2 text-sm"
+                                >
+                                    <Copy className="w-4 h-4" />
+                                    Copy Code
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(shareUrl);
+                                        const btn = document.getElementById('copy-url-btn');
+                                        if (btn) {
+                                            const originalText = btn.innerHTML;
+                                            btn.innerHTML = 'Link Copied!';
+                                            setTimeout(() => btn.innerHTML = originalText, 2000);
+                                        }
+                                    }}
+                                    id="copy-url-btn"
+                                    className="flex-1 py-3 bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/20 rounded-xl text-indigo-300 font-medium transition-colors flex items-center justify-center gap-2 text-sm"
+                                >
+                                    <Share2 className="w-4 h-4" />
+                                    Copy Link
+                                </button>
+                            </div>
                             <button
                                 onClick={() => {
                                     setToken(null);
                                     setText('');
                                 }}
-                                className="flex-1 py-3 bg-transparent hover:bg-white/5 text-white/60 hover:text-white rounded-xl transition-colors text-sm"
+                                className="w-full py-2 bg-transparent hover:bg-white/5 text-white/60 hover:text-white rounded-xl transition-colors text-xs"
                             >
                                 Share New
                             </button>

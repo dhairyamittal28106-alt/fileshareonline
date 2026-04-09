@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { saveMetadata, incrementTotalFiles } from '@/lib/db';
+import { saveMetadata, incrementTotalFiles, triggerCleanup } from '@/lib/db';
 import crypto from 'crypto';
 
 export async function POST(req: NextRequest) {
     try {
+        // Trigger lazy cleanup
+        triggerCleanup();
         const { text } = await req.json();
 
         if (!text || typeof text !== 'string') {
@@ -19,11 +21,8 @@ export async function POST(req: NextRequest) {
 
         await saveMetadata({
             token,
-            originalName: 'Text Snippet',
-            mimeType: 'text/plain',
-            size: new Blob([text]).size,
+            files: [], // Empty for text-only
             textContent: text,
-            filePath: '', // Not applicable for text
             createdAt: Date.now(),
         });
 

@@ -1,34 +1,44 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Download, File, Loader2, AlertCircle, ArrowRight, Check, Copy } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 interface FileMetadata {
-    originalName: string;
-    size: number;
-    mimeType: string;
+    files: Array<{
+        originalName: string;
+        size: number;
+        mimeType: string;
+    }>;
     textContent?: string;
+    createdAt: number;
 }
 
-export default function FileReceiver() {
-    const [token, setToken] = useState('');
+export default function FileReceiver({ initialToken = '' }: { initialToken?: string }) {
+    const [token, setToken] = useState(initialToken);
     const [loading, setLoading] = useState(false);
     const [fileData, setFileData] = useState<FileMetadata | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
 
-    const checkFile = async () => {
-        if (token.length < 6) return;
+    useEffect(() => {
+        if (initialToken && initialToken.length === 6) {
+            checkFile(initialToken);
+        }
+    }, []); // Only runs on mount. Relies on 'key' prop for resets.
+
+    const checkFile = async (explicitToken?: string) => {
+        const tokenToUse = explicitToken || token;
+        if (tokenToUse.length < 6) return;
         setLoading(true);
         setError(null);
         try {
             const res = await fetch('/api/retrieve', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token }),
+                body: JSON.stringify({ token: tokenToUse }),
             });
 
             if (!res.ok) {
@@ -46,9 +56,9 @@ export default function FileReceiver() {
         }
     };
 
-    const downloadFile = () => {
+    const downloadFile = (index: number = 0) => {
         if (!token) return;
-        window.location.href = `/api/file/${token}`;
+        window.location.href = `/api/file/${token}?index=${index}`;
     };
 
     const copyText = () => {
@@ -70,7 +80,7 @@ export default function FileReceiver() {
                     <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 flex flex-col items-center">
                         <div className="mb-6 text-center">
                             <h3 className="text-xl font-semibold text-white mb-2">Have a code?</h3>
-                            <p className="text-white/40 text-sm">Enter the 6-digit secure code to access the file or text.</p>
+                            <p className="text-white/40 text-sm">Enter the 6-digit secure code to access the shared content.</p>
                         </div>
 
                         <div className="relative w-full max-w-xs mb-6">
@@ -95,7 +105,7 @@ export default function FileReceiver() {
                         )}
 
                         <button
-                            onClick={checkFile}
+                            onClick={() => checkFile()}
                             disabled={token.length !== 6 || loading}
                             className="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-medium transition-all disabled:opacity-50 flex items-center justify-center gap-2 group"
                         >
@@ -151,36 +161,52 @@ export default function FileReceiver() {
                                 </div>
                             </>
                         ) : (
-                            <>
-                                <div className="w-20 h-20 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/20">
-                                    <File className="w-10 h-10 text-blue-400" />
+                            <div className="w-full flex flex-col gap-6">
+                                <div className="text-center">
+                                    <h3 className="text-2xl font-bold text-white mb-1">Shared Files</h3>
+                                    <p className="text-white/40 text-sm">
+                                        Received {fileData.files.length} {fileData.files.length === 1 ? 'file' : 'files'}
+                                    </p>
                                 </div>
 
-                                <h3 className="text-2xl font-bold text-white mb-1 text-center max-w-full truncate px-4">
-                                    {fileData.originalName}
-                                </h3>
-                                <p className="text-white/50 text-sm mb-8">
-                                    {(fileData.size / 1024 / 1024).toFixed(2)} MB • {fileData.mimeType || 'Unknown Type'}
-                                </p>
-
-                                <button
-                                    onClick={downloadFile}
-                                    className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-medium shadow-lg shadow-blue-900/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 mb-3"
-                                >
-                                    <Download className="w-5 h-5" />
-                                    Download Now
-                                </button>
+                                <div className="flex flex-col gap-3 w-full max-h-[400px] overflow-y-auto pr-2">
+                                    {fileData.files.map((file, idx) => (
+                                        <div
+                                            key={`${file.originalName}-${idx}`}
+                                            className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors group"
+                                        >
+                                            <div className="flex items-center gap-4 overflow-hidden">
+                                                <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/10">
+                                                    <File className="w-6 h-6 text-blue-400" />
+                                                </div>
+                                                <div className="overflow-hidden">
+                                                    <p className="text-white font-semibold truncate">{file.originalName}</p>
+                                                    <p className="text-white/40 text-xs mt-0.5">
+                                                        {(file.size / 1024 / 1024).toFixed(2)} MB • {file.mimeType.split('/')[1]?.toUpperCase() || 'FILE'}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => downloadFile(idx)}
+                                                className="p-3 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white rounded-xl transition-all active:scale-[0.95]"
+                                                title="Download"
+                                            >
+                                                <Download className="w-5 h-5" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
 
                                 <button
                                     onClick={() => {
                                         setFileData(null);
                                         setToken('');
                                     }}
-                                    className="text-white/40 hover:text-white text-sm transition-colors"
+                                    className="w-full py-4 mt-2 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white rounded-xl font-medium transition-colors border border-white/5"
                                 >
-                                    Cancel
+                                    Done
                                 </button>
-                            </>
+                            </div>
                         )}
                     </div>
                 </motion.div>

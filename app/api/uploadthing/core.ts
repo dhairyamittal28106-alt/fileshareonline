@@ -6,7 +6,7 @@ const f = createUploadthing();
 export const ourFileRouter = {
     // Define as many FileRoutes as you like, each with a unique routeSlug
     fileUploader: f({
-        blob: { maxFileSize: "2GB", maxFileCount: 1 },
+        blob: { maxFileSize: "2GB", maxFileCount: 10 },
     })
         .middleware(async () => {
             // This code runs on your server before upload

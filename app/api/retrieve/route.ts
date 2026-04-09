@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getMetadata } from '@/lib/db';
+import { getMetadata, triggerCleanup } from '@/lib/db';
 
 export async function POST(req: NextRequest) {
     try {
+        // Trigger lazy cleanup
+        triggerCleanup();
         const { token } = await req.json();
 
         if (!token) {
@@ -15,8 +17,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Invalid token' }, { status: 404 });
         }
 
-        // Return metadata without internal file path
-        const { filePath, ...publicMetadata } = metadata;
+        // Return metadata without internal file paths
+        const publicMetadata = {
+            files: metadata.files.map(({ filePath, fileKey, ...rest }) => rest),
+            textContent: metadata.textContent,
+            createdAt: metadata.createdAt
+        };
 
         return NextResponse.json(publicMetadata);
     } catch (error) {

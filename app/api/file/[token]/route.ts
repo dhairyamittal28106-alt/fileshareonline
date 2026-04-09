@@ -19,8 +19,15 @@ export async function GET(
         return NextResponse.json({ error: 'Invalid token or file expired' }, { status: 404 });
     }
 
-    // metadata.filePath now contains the Vercel Blob URL
-    const fileUrl = metadata.filePath;
+    // Support individual file downloads via index parameter
+    const fileIndex = parseInt(req.nextUrl.searchParams.get('index') || '0', 10);
+    const file = metadata.files[fileIndex];
+
+    if (!file) {
+        return NextResponse.json({ error: 'File not found' }, { status: 404 });
+    }
+
+    const fileUrl = file.filePath;
 
     try {
         // Fetch the file from Vercel Blob
@@ -31,14 +38,13 @@ export async function GET(
         }
 
         // Create a new response with the blob's body
-        // We assume the blob is public and accessible
         const blob = await response.blob();
 
         return new NextResponse(blob, {
             headers: {
-                'Content-Length': metadata.size.toString(),
-                'Content-Type': metadata.mimeType || 'application/octet-stream',
-                'Content-Disposition': `attachment; filename="${metadata.originalName}"`,
+                'Content-Length': file.size.toString(),
+                'Content-Type': file.mimeType || 'application/octet-stream',
+                'Content-Disposition': `attachment; filename="${file.originalName}"`,
             },
         });
     } catch (error) {
