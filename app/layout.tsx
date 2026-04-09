@@ -35,6 +35,13 @@ export default function RootLayout({
       <head>
         <meta name="google-adsense-account" content="ca-pub-8295491395007414" />
         <meta name="monetag" content="fe045356d3a3c4f9ea6bdc7c61da7497" />
+        {/* Multitag / Epic Tag */}
+        <Script 
+          src="https://quge5.com/88/tag.min.js" 
+          data-zone="227979" 
+          strategy="afterInteractive" 
+          data-cfasync="false"
+        />
         {/* Popunder Ad (Anti-Adblock) */}
         <Script 
           src="https://ruffianattorneymargarine.com/b5/69/eb/b569eb7b791361d8ac7541e832179947.js" 
