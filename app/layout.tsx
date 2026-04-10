@@ -39,49 +39,49 @@ export default function RootLayout({
         <meta name="monetag" content="fe045356d3a3c4f9ea6bdc7c61da7497" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#020617] min-h-screen relative`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#020617] min-h-screen relative overflow-x-hidden`}
       >
         <BackgroundEffects />
         <MobileOnlyTagScript />
         <AdContainer />
         
         {/* ═══ LEFT AD — exact 160x600 ═══ */}
-        <div className="fixed left-3 top-3 z-[50] block">
+        <div className="fixed left-3 top-3 z-[50] hidden lg:block">
           <div className="w-[160px] h-[600px] overflow-hidden">
             <div id="left-ad" className="w-[160px] h-[600px] overflow-hidden" />
           </div>
         </div>
 
         {/* ═══ RIGHT AD — exact 160x600 ═══ */}
-        <div className="fixed right-3 top-3 z-[50] block">
+        <div className="fixed right-3 top-3 z-[50] hidden lg:block">
           <div className="w-[160px] h-[600px] overflow-hidden">
             <div id="right-ad" className="w-[160px] h-[600px] overflow-hidden" />
           </div>
         </div>
 
         {/* ═══ TOP AD — after logo line, fixed in header area ═══ */}
-        <div className="absolute top-3 left-[518px] z-[60] block">
+        <div className="absolute top-3 left-[518px] z-[60] hidden lg:block">
           <div className="w-[728px] h-[90px] overflow-hidden">
             <div id="top-ad" className="w-[728px] h-[90px] overflow-hidden" />
           </div>
         </div>
 
         {/* ═══ LEFT BOTTOM AD — exact 160x600 ═══ */}
-        <div className="fixed left-3 bottom-3 z-[50] block">
+        <div className="fixed left-3 bottom-3 z-[50] hidden lg:block">
           <div className="w-[160px] h-[600px] overflow-hidden">
             <div id="left-ad-bottom" className="w-[160px] h-[600px] overflow-hidden" />
           </div>
         </div>
 
         {/* ═══ RIGHT BOTTOM AD — exact 160x600 ═══ */}
-        <div className="fixed right-3 bottom-3 z-[50] block">
+        <div className="fixed right-3 bottom-3 z-[50] hidden lg:block">
           <div className="w-[160px] h-[600px] overflow-hidden">
             <div id="right-ad-bottom" className="w-[160px] h-[600px] overflow-hidden" />
           </div>
         </div>
 
         {/* ═══ MAIN CONTENT ═══ */}
-        <main className="relative z-10 w-full lg:pl-[190px] lg:pr-[190px]">
+        <main className="relative z-10 w-full lg:pl-[190px] lg:pr-[190px] pb-24 lg:pb-0">
           {children}
         </main>
 
@@ -92,8 +92,8 @@ export default function RootLayout({
               <div id="bottom-left-fill" className="w-[300px] h-[250px] overflow-hidden" />
             </div>
 
-            <div className="w-[728px] h-[90px] overflow-hidden">
-              <div id="bottom-ad" className="w-[728px] h-[90px] overflow-hidden" />
+            <div className="w-full max-w-[728px] h-[90px] overflow-hidden">
+              <div id="bottom-ad" className="w-full max-w-[728px] h-[90px] overflow-hidden" />
             </div>
 
             <div className="hidden xl:block w-[300px] h-[250px] overflow-hidden">

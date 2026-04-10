@@ -141,10 +141,10 @@ export default function FileReceiver({ initialToken = '' }: { initialToken?: str
                                         {fileData.textContent}
                                     </div>
                                 </div>
-                                <div className="flex w-full gap-3">
+                                <div className="flex flex-col lg:flex-row w-full gap-4 sm:gap-6 lg:gap-3">
                                     <button
                                         onClick={copyText}
-                                        className="flex-1 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium shadow-lg shadow-indigo-900/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                                        className="flex-1 py-4 px-4 sm:w-auto w-full lg:w-auto bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium shadow-lg shadow-indigo-900/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                                     >
                                         <Copy className="w-5 h-5" />
                                         {copied ? 'Copied!' : 'Copy Text'}
@@ -154,7 +154,7 @@ export default function FileReceiver({ initialToken = '' }: { initialToken?: str
                                             setFileData(null);
                                             setToken('');
                                         }}
-                                        className="py-4 px-6 bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium transition-colors"
+                                        className="py-4 px-4 sm:px-6 w-full sm:w-auto lg:w-auto bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium transition-colors"
                                     >
                                         Done
                                     </button>
@@ -202,7 +202,7 @@ export default function FileReceiver({ initialToken = '' }: { initialToken?: str
                                         setFileData(null);
                                         setToken('');
                                     }}
-                                    className="w-full py-4 mt-2 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white rounded-xl font-medium transition-colors border border-white/5"
+                                    className="w-full py-4 px-4 mt-2 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white rounded-xl font-medium transition-colors border border-white/5"
                                 >
                                     Done
                                 </button>

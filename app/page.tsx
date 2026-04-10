@@ -111,7 +111,7 @@ export default function Home() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(99,102,241,0.10),transparent_42%)]" />
       <Navbar />
 
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-200px)] max-w-5xl mx-auto w-full relative z-10 px-6">
+      <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-200px)] w-full max-w-4xl lg:max-w-5xl mx-auto relative z-10 px-4 sm:px-6 lg:px-6">
             <div className="w-full">
               {/* Hero Section */}
               <motion.div

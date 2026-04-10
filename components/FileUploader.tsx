@@ -292,10 +292,10 @@ export default function FileUploader() {
                         </div>
 
                         <div className="flex flex-col gap-3 w-full">
-                            <div className="flex gap-3 w-full">
+                            <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-3 w-full">
                                 <button
                                     onClick={copyToken}
-                                    className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium transition-colors flex items-center justify-center gap-2 text-sm"
+                                    className="flex-1 py-3 px-4 sm:w-auto w-full lg:w-auto bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium transition-colors flex items-center justify-center gap-2 text-sm"
                                 >
                                     <Copy className="w-4 h-4" />
                                     Copy Code
@@ -311,7 +311,7 @@ export default function FileUploader() {
                                         }
                                     }}
                                     id="copy-file-url-btn"
-                                    className="flex-1 py-3 bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/20 rounded-xl text-indigo-300 font-medium transition-colors flex items-center justify-center gap-2 text-sm"
+                                    className="flex-1 py-3 px-4 sm:w-auto w-full lg:w-auto bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/20 rounded-xl text-indigo-300 font-medium transition-colors flex items-center justify-center gap-2 text-sm"
                                 >
                                     <Share2 className="w-4 h-4" />
                                     Copy Link
@@ -322,7 +322,7 @@ export default function FileUploader() {
                                     setToken(null);
                                     setFiles([]);
                                 }}
-                                className="w-full py-2 bg-transparent hover:bg-white/5 text-white/60 hover:text-white rounded-xl transition-colors text-xs"
+                                className="w-full sm:w-auto lg:w-full py-3 px-4 bg-transparent hover:bg-white/5 text-white/60 hover:text-white rounded-xl transition-colors text-xs"
                             >
                                 Send Another
                             </button>
