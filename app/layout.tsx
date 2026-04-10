@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import BackgroundEffects from '@/components/BackgroundEffects';
 import AdContainer from '@/components/AdContainer';
 import MobileOnlyTagScript from '@/components/MobileOnlyTagScript';
+import PopunderScript from '@/components/PopunderScript';
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
@@ -44,6 +45,7 @@ export default function RootLayout({
       >
         <BackgroundEffects />
         <MobileOnlyTagScript />
+        <PopunderScript />
         <AdContainer />
         
         {/* ═══ LEFT AD — exact 160x600 ═══ */}
