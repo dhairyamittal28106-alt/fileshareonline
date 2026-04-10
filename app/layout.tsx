@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import BackgroundEffects from '@/components/BackgroundEffects';
 import AdContainer from '@/components/AdContainer';
 import MobileOnlyTagScript from '@/components/MobileOnlyTagScript';
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -101,6 +102,7 @@ export default function RootLayout({
             </div>
           </div>
         </div>
+        <Analytics />
       </body>
     </html>
   );
