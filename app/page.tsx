@@ -23,11 +23,11 @@ function InteractiveArea() {
     <div className="w-full max-w-xl mx-auto relative z-20">
       {/* Main Mode Switcher */}
       <div className="flex justify-center mb-8">
-        <div className="bg-white/[0.06] p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl flex flex-col sm:flex-row gap-2 sm:gap-0 w-full sm:w-auto shadow-[0_20px_60px_-25px_rgba(99,102,241,0.45)]">
+        <div className="bg-white/[0.06] p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl flex shadow-[0_20px_60px_-25px_rgba(99,102,241,0.45)]">
           <button
             onClick={() => setMode('send')}
             className={clsx(
-              "w-full sm:w-auto py-3 px-4 sm:px-8 rounded-xl text-sm font-semibold transition-all duration-300",
+              "px-8 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300",
               mode === 'send'
                 ? "bg-gradient-to-r from-indigo-500 to-violet-500 text-white shadow-lg shadow-indigo-500/30"
                 : "text-white/55 hover:text-white hover:bg-white/5"
@@ -38,7 +38,7 @@ function InteractiveArea() {
           <button
             onClick={() => setMode('receive')}
             className={clsx(
-              "w-full sm:w-auto py-3 px-4 sm:px-8 rounded-xl text-sm font-semibold transition-all duration-300",
+              "px-8 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300",
               mode === 'receive'
                 ? "bg-gradient-to-r from-indigo-500 to-violet-500 text-white shadow-lg shadow-indigo-500/30"
                 : "text-white/55 hover:text-white hover:bg-white/5"
@@ -58,11 +58,11 @@ function InteractiveArea() {
             exit={{ opacity: 0, height: 0 }}
             className="flex justify-center mb-6 overflow-hidden"
           >
-            <div className="bg-black/25 border border-white/10 p-1 rounded-xl flex flex-col sm:flex-row gap-2 sm:gap-1 w-full sm:w-auto backdrop-blur-md">
+            <div className="bg-black/25 border border-white/10 p-1 rounded-xl flex gap-1 backdrop-blur-md">
               <button
                 onClick={() => setShareType('file')}
                 className={clsx(
-                  "w-full sm:w-auto py-3 px-4 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all",
+                  "px-4 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all",
                   shareType === 'file' ? "bg-white/10 text-white" : "text-white/40 hover:text-white"
                 )}
               >
@@ -71,7 +71,7 @@ function InteractiveArea() {
               <button
                 onClick={() => setShareType('text')}
                 className={clsx(
-                  "w-full sm:w-auto py-3 px-4 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all",
+                  "px-4 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all",
                   shareType === 'text' ? "bg-white/10 text-white" : "text-white/40 hover:text-white"
                 )}
               >
@@ -111,7 +111,7 @@ export default function Home() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(99,102,241,0.10),transparent_42%)]" />
       <Navbar />
 
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-200px)] max-w-4xl mx-auto w-full relative z-10 px-4 sm:px-6 lg:px-8">
+      <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-200px)] max-w-5xl mx-auto w-full relative z-10 px-6">
             <div className="w-full">
               {/* Hero Section */}
               <motion.div
