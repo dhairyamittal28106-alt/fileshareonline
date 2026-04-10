@@ -141,10 +141,10 @@ export default function FileReceiver({ initialToken = '' }: { initialToken?: str
                                         {fileData.textContent}
                                     </div>
                                 </div>
-                                <div className="flex w-full gap-3">
+                                <div className="flex flex-col sm:flex-row w-full gap-3 sm:gap-6">
                                     <button
                                         onClick={copyText}
-                                        className="flex-1 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium shadow-lg shadow-indigo-900/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                                        className="w-full sm:flex-1 py-3 px-4 sm:py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium shadow-lg shadow-indigo-900/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                                     >
                                         <Copy className="w-5 h-5" />
                                         {copied ? 'Copied!' : 'Copy Text'}
@@ -154,7 +154,7 @@ export default function FileReceiver({ initialToken = '' }: { initialToken?: str
                                             setFileData(null);
                                             setToken('');
                                         }}
-                                        className="py-4 px-6 bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium transition-colors"
+                                        className="w-full sm:w-auto py-3 px-4 sm:py-4 sm:px-6 bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium transition-colors"
                                     >
                                         Done
                                     </button>

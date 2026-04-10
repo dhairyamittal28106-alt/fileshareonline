@@ -137,10 +137,10 @@ export default function TextSharer() {
                         </div>
 
                         <div className="flex flex-col gap-3 w-full">
-                            <div className="flex gap-3 w-full">
+                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 w-full">
                                 <button
                                     onClick={copyToken}
-                                    className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium transition-colors flex items-center justify-center gap-2 text-sm"
+                                    className="w-full sm:flex-1 py-3 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium transition-colors flex items-center justify-center gap-2 text-sm"
                                 >
                                     <Copy className="w-4 h-4" />
                                     Copy Code
@@ -156,7 +156,7 @@ export default function TextSharer() {
                                         }
                                     }}
                                     id="copy-url-btn"
-                                    className="flex-1 py-3 bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/20 rounded-xl text-indigo-300 font-medium transition-colors flex items-center justify-center gap-2 text-sm"
+                                    className="w-full sm:flex-1 py-3 px-4 bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/20 rounded-xl text-indigo-300 font-medium transition-colors flex items-center justify-center gap-2 text-sm"
                                 >
                                     <Share2 className="w-4 h-4" />
                                     Copy Link
