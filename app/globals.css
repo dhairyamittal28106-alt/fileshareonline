@@ -79,3 +79,9 @@ body {
 .bg-grid-drift {
   animation: gridDrift 26s ease-in-out infinite;
 }
+
+@media (max-width: 1024px) {
+  .mobile-ad-hidden {
+    display: none !important;
+  }
+}

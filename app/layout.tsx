@@ -46,35 +46,35 @@ export default function RootLayout({
         <AdContainer />
         
         {/* ═══ LEFT AD — exact 160x600 ═══ */}
-        <div className="fixed left-3 top-3 z-[50] hidden lg:block">
+        <div className="fixed left-3 top-3 z-[50] block mobile-ad-hidden">
           <div className="w-[160px] h-[600px] overflow-hidden">
             <div id="left-ad" className="w-[160px] h-[600px] overflow-hidden" />
           </div>
         </div>
 
         {/* ═══ RIGHT AD — exact 160x600 ═══ */}
-        <div className="fixed right-3 top-3 z-[50] hidden lg:block">
+        <div className="fixed right-3 top-3 z-[50] block mobile-ad-hidden">
           <div className="w-[160px] h-[600px] overflow-hidden">
             <div id="right-ad" className="w-[160px] h-[600px] overflow-hidden" />
           </div>
         </div>
 
         {/* ═══ TOP AD — after logo line, fixed in header area ═══ */}
-        <div className="absolute top-3 left-[518px] z-[60] hidden lg:block">
+        <div className="absolute top-3 left-[518px] z-[60] block">
           <div className="w-[728px] h-[90px] overflow-hidden">
             <div id="top-ad" className="w-[728px] h-[90px] overflow-hidden" />
           </div>
         </div>
 
         {/* ═══ LEFT BOTTOM AD — exact 160x600 ═══ */}
-        <div className="fixed left-3 bottom-3 z-[50] hidden lg:block">
+        <div className="fixed left-3 bottom-3 z-[50] block mobile-ad-hidden">
           <div className="w-[160px] h-[600px] overflow-hidden">
             <div id="left-ad-bottom" className="w-[160px] h-[600px] overflow-hidden" />
           </div>
         </div>
 
         {/* ═══ RIGHT BOTTOM AD — exact 160x600 ═══ */}
-        <div className="fixed right-3 bottom-3 z-[50] hidden lg:block">
+        <div className="fixed right-3 bottom-3 z-[50] block mobile-ad-hidden">
           <div className="w-[160px] h-[600px] overflow-hidden">
             <div id="right-ad-bottom" className="w-[160px] h-[600px] overflow-hidden" />
           </div>
