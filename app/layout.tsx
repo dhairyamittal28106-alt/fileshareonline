@@ -39,7 +39,7 @@ export default function RootLayout({
         <meta name="monetag" content="fe045356d3a3c4f9ea6bdc7c61da7497" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#020617] min-h-screen relative overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#020617] min-h-screen relative`}
       >
         <BackgroundEffects />
         <MobileOnlyTagScript />
@@ -60,7 +60,7 @@ export default function RootLayout({
         </div>
 
         {/* ═══ TOP AD — after logo line, fixed in header area ═══ */}
-        <div className="absolute top-3 left-[518px] z-[60] block">
+        <div className="absolute top-3 left-[518px] z-[60] block mobile-ad-hidden">
           <div className="w-[728px] h-[90px] overflow-hidden">
             <div id="top-ad" className="w-[728px] h-[90px] overflow-hidden" />
           </div>
