@@ -23,6 +23,12 @@
   to { transform: translateX(100%); }
 }
 
+@keyframes gridDrift {
+  0% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(20px, 12px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
 @layer base {
   body {
     background-color: #020617;
@@ -68,4 +74,8 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #475569;
+}
+
+.bg-grid-drift {
+  animation: gridDrift 26s ease-in-out infinite;
 }

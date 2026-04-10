@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from 'next/script';
 import BackgroundEffects from '@/components/BackgroundEffects';
+import AdContainer from '@/components/AdContainer';
+import MobileOnlyTagScript from '@/components/MobileOnlyTagScript';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,31 +37,70 @@ export default function RootLayout({
       <head>
         <meta name="google-adsense-account" content="ca-pub-8295491395007414" />
         <meta name="monetag" content="fe045356d3a3c4f9ea6bdc7c61da7497" />
-        {/* Multitag / Epic Tag */}
-        <Script 
-          src="https://quge5.com/88/tag.min.js" 
-          data-zone="227979" 
-          strategy="afterInteractive" 
-          data-cfasync="false"
-        />
-        {/* Popunder Ad (Anti-Adblock) */}
-        <Script 
-          src="https://ruffianattorneymargarine.com/b5/69/eb/b569eb7b791361d8ac7541e832179947.js" 
-          strategy="afterInteractive" 
-        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#020617] min-h-screen relative`}
       >
         <BackgroundEffects />
-        <main className="relative z-10">
+        <MobileOnlyTagScript />
+        <AdContainer />
+        
+        {/* ═══ LEFT AD — exact 160x600 ═══ */}
+        <div className="fixed left-3 top-3 z-[50] block">
+          <div className="w-[160px] h-[600px] overflow-hidden">
+            <div id="left-ad" className="w-[160px] h-[600px] overflow-hidden" />
+          </div>
+        </div>
+
+        {/* ═══ RIGHT AD — exact 160x600 ═══ */}
+        <div className="fixed right-3 top-3 z-[50] block">
+          <div className="w-[160px] h-[600px] overflow-hidden">
+            <div id="right-ad" className="w-[160px] h-[600px] overflow-hidden" />
+          </div>
+        </div>
+
+        {/* ═══ TOP AD — after logo line, fixed in header area ═══ */}
+        <div className="absolute top-3 left-[518px] z-[60] block">
+          <div className="w-[728px] h-[90px] overflow-hidden">
+            <div id="top-ad" className="w-[728px] h-[90px] overflow-hidden" />
+          </div>
+        </div>
+
+        {/* ═══ LEFT BOTTOM AD — exact 160x600 ═══ */}
+        <div className="fixed left-3 bottom-3 z-[50] block">
+          <div className="w-[160px] h-[600px] overflow-hidden">
+            <div id="left-ad-bottom" className="w-[160px] h-[600px] overflow-hidden" />
+          </div>
+        </div>
+
+        {/* ═══ RIGHT BOTTOM AD — exact 160x600 ═══ */}
+        <div className="fixed right-3 bottom-3 z-[50] block">
+          <div className="w-[160px] h-[600px] overflow-hidden">
+            <div id="right-ad-bottom" className="w-[160px] h-[600px] overflow-hidden" />
+          </div>
+        </div>
+
+        {/* ═══ MAIN CONTENT ═══ */}
+        <main className="relative z-10 w-full lg:pl-[190px] lg:pr-[190px]">
           {children}
         </main>
-        {/* Social Bar (Anti-Adblock) */}
-        <Script 
-          src="https://ruffianattorneymargarine.com/0d/14/aa/0d14aa83af9eea8f8000642c5b5aebf.js" 
-          strategy="afterInteractive" 
-        />
+
+        {/* ═══ BOTTOM ADS — fill center and side gaps on wide screens ═══ */}
+        <div className="relative z-20 w-full flex justify-center pb-3">
+          <div className="flex items-end gap-3">
+            <div className="hidden xl:block w-[300px] h-[250px] overflow-hidden">
+              <div id="bottom-left-fill" className="w-[300px] h-[250px] overflow-hidden" />
+            </div>
+
+            <div className="w-[728px] h-[90px] overflow-hidden">
+              <div id="bottom-ad" className="w-[728px] h-[90px] overflow-hidden" />
+            </div>
+
+            <div className="hidden xl:block w-[300px] h-[250px] overflow-hidden">
+              <div id="bottom-right-fill" className="w-[300px] h-[250px] overflow-hidden" />
+            </div>
+          </div>
+        </div>
       </body>
     </html>
   );

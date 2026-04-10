@@ -18,7 +18,7 @@ export default function Navbar() {
           }
         }
       }}
-      className="relative z-10 w-full max-w-6xl mx-auto px-6 py-8 flex items-center justify-between"
+      className="relative z-10 w-full max-w-6xl mx-auto px-6 py-6 md:py-8 flex items-center justify-between"
     >
       <motion.div 
         variants={{
@@ -27,7 +27,7 @@ export default function Navbar() {
         }}
         className="flex items-center gap-3 md:gap-4 group cursor-pointer"
       >
-        <div className="w-10 h-10 md:w-12 md:h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center overflow-hidden shadow-lg shadow-indigo-500/10 group-hover:rotate-[10deg] transition-transform duration-500">
+        <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-indigo-500/20 to-violet-500/10 border border-indigo-400/30 rounded-xl flex items-center justify-center overflow-hidden shadow-lg shadow-indigo-500/20 group-hover:rotate-[10deg] transition-transform duration-500">
           <img src="/logo.png" alt="SHAREDROP Logo" className="w-full h-full object-cover p-1.5" />
         </div>
         <div className="flex flex-col">
@@ -40,7 +40,7 @@ export default function Navbar() {
           hidden: { opacity: 0, x: 20 },
           visible: { opacity: 1, x: 0 }
         }}
-        className="hidden md:flex items-center gap-8 text-sm font-medium text-white/60"
+        className="hidden md:flex items-center gap-8 text-sm font-medium text-white/70 px-5 py-2.5 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-lg shadow-[0_20px_50px_-30px_rgba(99,102,241,0.7)]"
       >
         <a href="#how-it-works" className="hover:text-white transition-colors relative group">
           How it Works
