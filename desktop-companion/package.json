@@ -1,0 +1,14 @@
+{
+  "name": "pdfshareonline-desktop-companion",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Desktop companion for future Bluetooth handoff from pdfshareonline.",
+  "main": "src/main.js",
+  "scripts": {
+    "dev": "electron .",
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^37.2.0"
+  }
+}

@@ -2,10 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, File, Check, Copy, Loader2, X, Share2, QrCode } from 'lucide-react';
+import { Upload, File, Check, Loader2, SendHorizontal, X } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { useUploadThing } from "@/lib/uploadthing";
 import { QRCodeSVG } from 'qrcode.react';
+import BluetoothCompanionCard from '@/components/BluetoothCompanionCard';
+import DevicePicker from '@/components/DevicePicker';
+import type { DeviceIdentity } from '@/lib/deviceIdentity';
+
+type TargetDevice = {
+    id: string;
+    name: string;
+    mode: 'send' | 'receive' | 'idle';
+    lastSeen: number;
+};
 
 export default function FileUploader() {
     const [files, setFiles] = useState<File[]>([]);
@@ -13,6 +23,10 @@ export default function FileUploader() {
     const [error, setError] = useState<string | null>(null);
     const [origin, setOrigin] = useState('');
     const [isDragging, setIsDragging] = useState(false);
+    const [selectedDevice, setSelectedDevice] = useState<TargetDevice | null>(null);
+    const [identity, setIdentity] = useState<DeviceIdentity | null>(null);
+    const [deliveryStatus, setDeliveryStatus] = useState<string | null>(null);
+    const [sendingToDevice, setSendingToDevice] = useState(false);
 
     useEffect(() => {
         setOrigin(window.location.origin);
@@ -61,8 +75,9 @@ export default function FileUploader() {
 
                     const data = await response.json();
                     setToken(data.token);
+                    setDeliveryStatus(null);
                 } catch (err) {
-                    setError('Upload successful but failed to save token.');
+                    setError(err instanceof Error ? err.message : 'Upload successful but failed to save token.');
                     console.error(err);
                 }
             }
@@ -96,9 +111,36 @@ export default function FileUploader() {
         }
     };
 
-    const copyToken = () => {
-        if (token) {
-            navigator.clipboard.writeText(token);
+    const sendToSelectedDevice = async () => {
+        if (!token || !selectedDevice || !identity) {
+            return;
+        }
+
+        setSendingToDevice(true);
+        setError(null);
+
+        try {
+            const transferResponse = await fetch('/api/devices/inbox', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    targetDeviceId: selectedDevice.id,
+                    token,
+                    fromDeviceId: identity.id,
+                    fromDeviceName: identity.name,
+                    kind: 'file',
+                }),
+            });
+
+            if (!transferResponse.ok) {
+                throw new Error('Direct delivery failed.');
+            }
+
+            setDeliveryStatus(`Sent to ${selectedDevice.name}`);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Direct delivery failed.');
+        } finally {
+            setSendingToDevice(false);
         }
     };
 
@@ -247,7 +289,14 @@ export default function FileUploader() {
                                         exit={{ opacity: 0 }}
                                         className="flex items-center justify-center gap-2"
                                     >
-                                        <span>Create Secure Link</span>
+                                        {selectedDevice ? (
+                                            <>
+                                                <SendHorizontal className="w-5 h-5" />
+                                                <span>Send to {selectedDevice.name}</span>
+                                            </>
+                                        ) : (
+                                            <span>Create Secure Link</span>
+                                        )}
                                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_2s_infinite] pointer-events-none" />
                                     </motion.div>
                                 )}
@@ -259,70 +308,88 @@ export default function FileUploader() {
                         key="success"
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="flex flex-col items-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl"
+                        className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[28px] p-5 md:p-7 shadow-2xl"
                     >
-                        <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6">
-                            <Check className="w-10 h-10 text-emerald-400" />
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="w-14 h-14 bg-emerald-500/20 rounded-2xl flex items-center justify-center shrink-0">
+                                <Check className="w-7 h-7 text-emerald-400" />
+                            </div>
+                            <div>
+                                <h3 className="text-2xl font-bold text-white">{deliveryStatus ? 'Delivered to Device' : 'Ready to Share'}</h3>
+                                <p className="text-sm text-white/50 mt-1">
+                                    {deliveryStatus || 'Scan the QR or use the code and link below.'}
+                                </p>
+                                <p className="text-[11px] text-indigo-300 font-medium uppercase tracking-[0.18em] mt-2">Expires in 15 minutes</p>
+                            </div>
                         </div>
 
-                        <h3 className="text-2xl font-bold text-white mb-2">Ready to Share</h3>
-                        <p className="text-white/50 text-center mb-8 max-w-xs">
-                            Scan the QR code or use the security code to access your files.
-                            <span className="block mt-2 text-indigo-400 font-medium text-xs uppercase tracking-wider">Expires in 15 minutes</span>
-                        </p>
-
-                        <div className="flex flex-col items-center gap-6 mb-8 w-full">
-                            {/* QR Code Section */}
-                            <div className="bg-white p-4 rounded-2xl shadow-2xl border-4 border-white/10">
-                                <QRCodeSVG
-                                    value={shareUrl}
-                                    size={160}
-                                    level="H"
-                                    includeMargin={false}
-                                />
+                        <div className="grid gap-4 md:grid-cols-[220px_minmax(0,1fr)] w-full mb-5">
+                            <div className="rounded-[24px] bg-white p-4 shadow-2xl border-4 border-white/10 flex items-center justify-center min-h-[220px]">
+                                <QRCodeSVG value={shareUrl} size={168} level="H" includeMargin={false} />
                             </div>
 
-                            <div className="relative w-full group">
-                                <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <div className="relative bg-black/40 border border-white/10 rounded-xl p-4 flex flex-col items-center gap-1">
-                                    <span className="text-[10px] text-white/30 uppercase tracking-widest font-semibold">Security Code</span>
-                                    <span className="text-4xl font-mono font-bold text-white tracking-[0.2em]">{token}</span>
+                            <div className="grid gap-4">
+                                <div className="relative group">
+                                    <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <div className="relative bg-black/40 border border-white/10 rounded-2xl p-4 flex flex-col gap-2">
+                                        <span className="text-[10px] text-white/30 uppercase tracking-widest font-semibold">Security Code</span>
+                                        <span className="text-4xl md:text-[2.6rem] leading-none font-mono font-bold text-white tracking-[0.18em]">{token}</span>
+                                    </div>
+                                </div>
+
+                                <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
+                                    <div className="flex items-center justify-between gap-3 mb-3">
+                                        <span className="text-[10px] text-white/30 uppercase tracking-widest font-semibold">Share Link</span>
+                                        <button
+                                            onClick={() => navigator.clipboard.writeText(shareUrl)}
+                                            className="px-3 py-1.5 rounded-lg border border-indigo-500/20 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-200 text-xs font-medium transition-colors"
+                                        >
+                                            Copy Link
+                                        </button>
+                                    </div>
+                                    <p className="text-sm text-white/75 break-all">{shareUrl}</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-3 w-full">
-                            <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-3 w-full">
-                                <button
-                                    onClick={copyToken}
-                                    className="flex-1 py-3 px-4 sm:w-auto w-full lg:w-auto bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium transition-colors flex items-center justify-center gap-2 text-sm"
-                                >
-                                    <Copy className="w-4 h-4" />
-                                    Copy Code
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(shareUrl);
-                                        const btn = document.getElementById('copy-file-url-btn');
-                                        if (btn) {
-                                            const originalText = btn.innerHTML;
-                                            btn.innerHTML = 'Link Copied!';
-                                            setTimeout(() => btn.innerHTML = originalText, 2000);
-                                        }
-                                    }}
-                                    id="copy-file-url-btn"
-                                    className="flex-1 py-3 px-4 sm:w-auto w-full lg:w-auto bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/20 rounded-xl text-indigo-300 font-medium transition-colors flex items-center justify-center gap-2 text-sm"
-                                >
-                                    <Share2 className="w-4 h-4" />
-                                    Copy Link
-                                </button>
-                            </div>
+                            <BluetoothCompanionCard
+                                kind="file"
+                                token={token}
+                                shareUrl={shareUrl}
+                            />
+                            <DevicePicker
+                                mode="send"
+                                selectedDeviceId={selectedDevice?.id || null}
+                                onSelectDevice={setSelectedDevice}
+                                onIdentityReady={setIdentity}
+                                compact
+                            />
+                            <button
+                                onClick={sendToSelectedDevice}
+                                disabled={!selectedDevice || sendingToDevice}
+                                className="w-full py-3 px-4 bg-emerald-600/15 hover:bg-emerald-600/25 border border-emerald-500/20 rounded-xl text-emerald-100 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            >
+                                {sendingToDevice ? (
+                                    <>
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                        <span>Sending to device...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <SendHorizontal className="w-4 h-4" />
+                                        <span>{selectedDevice ? `Send to ${selectedDevice.name}` : 'Select a device to send'}</span>
+                                    </>
+                                )}
+                            </button>
                             <button
                                 onClick={() => {
                                     setToken(null);
                                     setFiles([]);
+                                    setDeliveryStatus(null);
+                                    setSelectedDevice(null);
                                 }}
-                                className="w-full sm:w-auto lg:w-full py-3 px-4 bg-transparent hover:bg-white/5 text-white/60 hover:text-white rounded-xl transition-colors text-xs"
+                                className="w-full py-3 px-4 bg-transparent hover:bg-white/5 text-white/60 hover:text-white rounded-xl transition-colors text-xs"
                             >
                                 Send Another
                             </button>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pdfshareonline Bluetooth Companion</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Desktop Companion</p>
+        <h1>Bluetooth handoff bridge</h1>
+        <p class="lede">
+          This desktop app receives share jobs from your website on localhost. It is the place where native Bluetooth integration can be added next.
+        </p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Bridge</p>
+            <h2>Local bridge ready</h2>
+          </div>
+          <span class="badge">http://127.0.0.1:45721</span>
+        </div>
+        <p class="muted">
+          Keep this app running, then use the Bluetooth companion card in the website success screen to send a share job here.
+        </p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Queue</p>
+            <h2>Incoming shares</h2>
+          </div>
+        </div>
+        <div id="job-list" class="job-list">
+          <p class="empty">No share jobs yet.</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Next Step</p>
+            <h2>Native Bluetooth integration</h2>
+          </div>
+        </div>
+        <p class="muted">
+          This scaffold is ready for a Windows-specific Bluetooth sender module. The web app can already hand jobs into this desktop layer.
+        </p>
+      </section>
+    </main>
+
+    <script src="./renderer.js"></script>
+  </body>
+  </html>

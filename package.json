@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "desktop:install": "npm install --prefix desktop-companion",
+    "desktop:dev": "npm run dev --prefix desktop-companion"
   },
   "dependencies": {
     "@uploadthing/react": "^7.3.3",

@@ -70,7 +70,6 @@ function replaceAndRunScripts(container: HTMLElement): Promise<void> {
 
           if (oldScript.src) {
             newScript.src = oldScript.src;
-            // Keep execution order deterministic for ad config + invoke pair.
             newScript.async = false;
             newScript.onload = () => resolve();
             newScript.onerror = () => resolve();
@@ -167,7 +166,6 @@ export default function AdContainer() {
 
       await runAds();
 
-      // One quick second pass only.
       window.setTimeout(() => {
         if (!disposed) void runAds();
       }, 2500);

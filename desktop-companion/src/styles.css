@@ -1,0 +1,137 @@
+:root {
+  color-scheme: dark;
+  --bg: #07111f;
+  --panel: rgba(15, 23, 42, 0.82);
+  --panel-border: rgba(148, 163, 184, 0.14);
+  --text: #f8fafc;
+  --muted: rgba(226, 232, 240, 0.68);
+  --accent: #38bdf8;
+  --accent-soft: rgba(56, 189, 248, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 35%),
+    linear-gradient(180deg, #020617 0%, var(--bg) 100%);
+  color: var(--text);
+}
+
+.shell {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 40px 24px 56px;
+}
+
+.hero,
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 28px;
+  padding: 24px;
+  backdrop-filter: blur(18px);
+}
+
+.hero {
+  margin-bottom: 20px;
+}
+
+.panel + .panel {
+  margin-top: 18px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: rgba(226, 232, 240, 0.42);
+}
+
+h1,
+h2,
+.lede,
+.muted,
+.badge,
+.empty,
+.job-card,
+.job-link {
+  margin: 0;
+}
+
+h1 {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+h2 {
+  font-size: 22px;
+}
+
+.lede,
+.muted {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.badge {
+  padding: 10px 14px;
+  background: var(--accent-soft);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 999px;
+  color: #dff7ff;
+  font-size: 13px;
+}
+
+.job-list {
+  display: grid;
+  gap: 12px;
+}
+
+.job-card {
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--panel-border);
+  background: rgba(2, 6, 23, 0.55);
+}
+
+.job-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.job-token,
+.job-status,
+.job-link {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+.job-link {
+  color: #dff7ff;
+  word-break: break-all;
+}
+
+.empty {
+  padding: 20px;
+  border-radius: 18px;
+  background: rgba(2, 6, 23, 0.45);
+  color: var(--muted);
+  text-align: center;
+}

@@ -1,5 +1,18 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Bluetooth Companion
+
+Real Bluetooth transfer cannot run directly inside the browser, so this repo now includes a desktop companion scaffold in [desktop-companion](C:\Users\HP\pdfshareonline\desktop-companion).
+
+To start it:
+
+```bash
+npm run desktop:install
+npm run desktop:dev
+```
+
+When the companion is running, the website success screen can hand a share job to it over `http://127.0.0.1:45721`.
+
 ## Getting Started
 
 First, run the development server:

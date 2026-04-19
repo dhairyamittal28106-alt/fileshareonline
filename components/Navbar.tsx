@@ -32,7 +32,7 @@ export default function Navbar() {
         </div>
         <div className="flex flex-col">
           <span className="text-xl md:text-2xl font-black tracking-tighter text-white leading-none">SHAREDROP</span>
-          <span className="text-[8px] md:text-[9px] text-white/40 uppercase tracking-[0.2em] md:tracking-[0.25em] mt-1 font-bold">Fast • Secure • Seamless</span>
+          <span className="text-[8px] md:text-[9px] text-white/40 uppercase tracking-[0.2em] md:tracking-[0.25em] mt-1 font-bold">Fast â€¢ Secure â€¢ Seamless</span>
         </div>
       </motion.div>
       <motion.div 
